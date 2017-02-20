@@ -1,1 +1,1 @@
-# AGS
+# AG_TIME
