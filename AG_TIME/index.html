@@ -4,16 +4,18 @@
         <title>AGENSE</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
         <meta charset="utf-8">
+        
         <link href="jquery-mobile/jquery.mobile-1.4.5.min.css" rel="stylesheet" type="text/css" />
         <link href="styles/theme.css" rel="stylesheet" type="text/css" />
+        
     </head>
     <body>
 
-        <div id="logon" data-role="page" data-mini="true">
+        <div id="logon" data-role="page" >
             <div data-role="header" data-position="fixed"  data-tap-toggle="false">
-                <h1>AGENSE</h1>
+                <h1 style="overflow:initial">AGENSE DOMICILIO</h1>
             </div>
-            <div data-role="content">
+            <div data-role="content" style="padding-top: 3%;">
 
                 Usuario :
                 <input type="text" id="userName" value="" />
@@ -23,13 +25,33 @@
                 <a id="logIn" data-role="button" >Ingresar</a>
 
                 <br/><br/>
-                <label>Update 1.1.5</label>
+                <label>Update 1.0.1</label>
             </div>
         </div>
 
-        <div id="home" data-role="page" data-mini="true">
+        <div id="home" data-role="page" >
+            <div class="header" data-position="fixed"  data-tap-toggle="false">
+                <h1 style="overflow:initial">AGENSE DOMICILIO</h1>
+            </div>
+            <div data-role="content" style="padding-top: 5%;">
+                <div style="padding:3.5em;background:#95BADA" class="ui-input-btn ui-btn ui-icon-action ui-btn-icon-top">
+                            INGRESAR ENTREGA
+                    <input type="button" data-enhanced="true" id="scanButton" value="entregado">                        
+                </div>
+                <ul data-role="listview">
+                <li data-role="list-divider" role="heading" class="ui-li-divider ui-bar-inherit ui-first-child">
+                    Entrega
+                </li>    
+                </ul>
+                
+                <!--<div class="content" id="result">
+                </div>-->
+            </div>            
+        </div>
+        
+        <div id="home2" data-role="page" data-mini="true">
             <div class="header">
-                <h1>AGENSE SCANNER</h1>
+                <h1>AGENSE DOMICILIO</h1>
             </div>
             <div data-role="content" style="padding-top: 20%;">
                 <div style="padding:3.5em;background:#95BADA" class="ui-input-btn ui-btn ui-icon-search ui-btn-icon-top">

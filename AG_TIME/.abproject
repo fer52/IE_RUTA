@@ -1,8 +1,8 @@
 {
   "ProjectGuid": "38bc0908-3699-4d09-a8d6-9b137677883e",
   "ProjectTypeGuids": "{070BCB52-5A75-4F8C-A973-144AF0EAFCC9}",
-  "AppIdentifier": "com.telerik.samplebarcodescanner",
-  "ProjectName": "sample-barcode-scanner",
+  "AppIdentifier": "com.agense.agensetime",
+  "ProjectName": "AG_TIME",
   "AndroidPermissions": [
     "android.permission.CAMERA",
     "android.permission.FLASHLIGHT",
@@ -33,7 +33,7 @@
     "cordova-plugin-splashscreen",
     "cordova-plugin-whitelist"
   ],
-  "DisplayName": "Agense",
+  "DisplayName": "Agense Domicilio",
   "WP8SupportedResolutions": [
     "ID_RESOLUTION_WVGA",
     "ID_RESOLUTION_WXGA",
@@ -45,7 +45,7 @@
   "WP8Capabilities": [],
   "iOSBackgroundMode": [],
   "WP8Requirements": [],
-  "Description": "Agense",
+  "Description": "Agense Domicilio",
   "Framework": "Cordova",
   "projectVersion": 1,
   "WP8PublisherID": "{0c335d44-852f-444c-bbcc-50d68fdedd2b}",
