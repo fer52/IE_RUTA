@@ -34,26 +34,39 @@
                 <h1 style="overflow:initial">AGENSE DOMICILIO</h1>
             </div>
             <div data-role="content" style="padding-top: 5%;">
-                <div style="padding:3.5em;background:#95BADA" class="ui-input-btn ui-btn ui-icon-action ui-btn-icon-top">
-                            INGRESAR ENTREGA
+                <div style="padding:3em;background:#95BADA" class="ui-input-btn ui-btn ui-icon-action ui-btn-icon-top">
+                            NUEVA RUTA
                     <input type="button" data-enhanced="true" id="scanButton" value="entregado">                        
                 </div>
-                <div style="padding:3.5em;background:#95BADA" class="ui-input-btn ui-btn ui-icon-action ui-btn-icon-top">
-                            LISTA DE ENTREGAS ACTIVAS
+                <div style="padding:3em;background:#95BADA" class="ui-input-btn ui-btn ui-icon-action ui-btn-icon-top">
+                            RUTA ACTIVA
                     <input type="button" data-enhanced="true" id="scanButton" value="entregado">                        
                 </div>
-                
-                
-                <ul data-role="listview">
-                <li data-role="list-divider" role="heading" class="ui-li-divider ui-bar-inherit ui-first-child">
-                    Entrega
-                </li>    
-                </ul>
+                <div style="padding:3em;background:#95BADA" class="ui-input-btn ui-btn ui-icon-action ui-btn-icon-top">
+                            HISTORIAL
+                    <input type="button" data-enhanced="true" id="scanButton" value="entregado">                        
+                </div>
                 
                 <!--<div class="content" id="result">
                 </div>-->
             </div>            
         </div>
+                
+        <div id="pageactive" data-role="page" >
+            <div class="header" data-position="fixed"  data-tap-toggle="false">
+                <h1 style="overflow:initial">AGENSE DOMICILIO</h1>
+            </div>
+            <div data-role="content" style="padding-top: 5%;">
+                <span>RUTA ACTIVA</span>
+                <ul data-role="listview">
+                <li data-role="list-divider" role="heading" class="ui-li-divider ui-bar-inherit ui-first-child">
+                    Entrega
+                </li>    
+                </ul>
+        
+            </div>            
+        </div>
+        
         
         <div id="home2" data-role="page" data-mini="true">
             <div class="header">
