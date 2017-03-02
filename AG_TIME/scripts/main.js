@@ -78,7 +78,7 @@ App.prototype = {
                                                       //localStorageApp.insertVariable('sessionDate', getCurrentDateA());
                                                       watchPosition();
                                                       localStorageAppLogin = getCurrentDateA();
-                                                      $.mobile.changePage("#home", { transition: "flip" });
+                                                      $.mobile.changePage("#home1", { transition: "flip" });
                                                   }else {
                                                       showAlert('Usuario o contraseña incorrecta');
                                                   }                                                  
