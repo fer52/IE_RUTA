@@ -84,7 +84,12 @@ App.prototype = {
         //nueva ruta
         routeButton.addEventListener("click",
                                     function() { 
-                                        //that._scan.call(that); 
+                                        $.mobile.changePage("#newroute", { transition: "flip" });
+                                    });
+        
+        document.getElementById("returnsettings").addEventListener("click",
+                                    function() { 
+                                        $.mobile.changePage("#pagesettings", { transition: "flip" });
                                     });
         
         //estado entrega
@@ -97,9 +102,37 @@ App.prototype = {
                                         //that._selectedResult(0); 
                                     });
         
+        
+        
         //camera        
         //alert(navigator.camera);
         that._destinationType = navigator.camera.DestinationType;
+        
+        //trasladar a menu de acciones
+        document.getElementById("moveSettings").addEventListener("click",
+                                    function() { 
+                                        $.mobile.changePage("#pagesettings", { transition: "flip" });
+                                    });
+        document.getElementById("returnAcive").addEventListener("click",
+                                    function() { 
+                                        $.mobile.changePage("#pageactive", { transition: "flip" });
+                                    });
+        
+        //nueva ruta
+        document.getElementById("saveRoute").addEventListener("click",
+                                    function() { 
+                                        
+                                        $.mobile.changePage("#pageactive", { transition: "flip" });
+                                        
+                                    });
+        
+        document.getElementById("newItem").addEventListener("click",
+                                    function() { 
+                                        
+                                        $.mobile.changePage("#pageactive", { transition: "flip" });
+                                        
+                                    });
+        
         
         //var sessionDate = localStorageApp.getVariable('sessionDate');
         //var sessionDate = localStorageAppLogin;
