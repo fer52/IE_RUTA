@@ -13,6 +13,20 @@ function onDeviceReady() {
 function App() {
 }
 
+var currentItem = {
+    latitude:0,
+    longitude:0,
+    imageURI:'',
+    barCode:'',
+    status: 0,
+    lagginStatus:0,
+    d:0,
+    m:0,
+    y:0,
+    h:0,
+    request: 0    
+};
+
 var geoItem = {
     latitude:0,
     longitude:0   
@@ -31,7 +45,6 @@ App.prototype = {
     run: function() {
         var that = this,
             routeButton = document.getElementById("routeButton"),
-            routeActiveButton = document.getElementById("routeActiveButton"),
             historyButton = document.getElementById("historyButton");
         
         logIn = document.getElementById("logIn");        
@@ -93,10 +106,10 @@ App.prototype = {
                                     });
         
         //estado entrega
-        routeActiveButton.addEventListener("click",
+        /*routeActiveButton.addEventListener("click",
                                       function() { 
                                           //that._selectedResult(1); 
-                                      });
+                                      });*/
         historyButton.addEventListener("click",
                                     function() { 
                                         //that._selectedResult(0); 
@@ -129,9 +142,25 @@ App.prototype = {
         document.getElementById("newItem").addEventListener("click",
                                     function() { 
                                         
-                                        $.mobile.changePage("#pageactive", { transition: "flip" });
+                                        $.mobile.changePage("#newItemRoute", { transition: "flip" });
                                         
                                     });
+        
+        
+        //new item
+        document.getElementById("returnNewRoute").addEventListener("click",
+                                    function() { 
+                                        
+                                        $.mobile.changePage("#newroute", { transition: "flip" });
+                                        
+                                    });
+        
+        document.getElementById("takePhotoNew").addEventListener("click",
+                                    function() { 
+                                        console.log('take photo');
+                                        that._capturePhoto();                                        
+                                    });
+        
         
         
         //var sessionDate = localStorageApp.getVariable('sessionDate');
@@ -139,7 +168,38 @@ App.prototype = {
         //if (sessionDate !== '' && sessionDate !== undefined && sessionDate == getCurrentDateA()) {            
          //   $.mobile.changePage("#home", { transition: "flip" });
         //}
-    }
+    },
+       //capture photo
+    _capturePhoto: function() {
+        var that = this;
+        
+        // Take picture using device camera and retrieve image as base64-encoded string.
+        navigator.camera.getPicture(function() {
+            //that._uploadPhoto.apply(that, arguments);
+            that._onPhotoDataSuccess.apply(that, arguments);
+        }, function() {
+            that._onFail.apply(that, arguments);
+        }, {
+                                        //quality: 30,
+                                        destinationType: that._destinationType.FILE_URI, //DATA_URL
+                                        targetWidth: 800,
+                                        targetHeight: 600
+                                        //sourceType: navigator.camera.PictureSourceType.SAVEDPHOTOALBUM 
+                                    });
+    },
+    _onPhotoDataSuccess: function(imageURI) {
+        currentItem.imageURI = imageURI;
+        
+        navigator.notification.alert('Fotografía de comprobante completada')        
+        //$.mobile.changePage("#decision", { transition: "flip" });        
+        console.log(currentItem.imagenURI);
+        document.getElementById('previewTakePhoto').src = currentItem.imagenURI;
+    },
+    _onFail: function(message) {
+        var that = this;
+        that._capturePhoto();
+    },
+ 
 };
 
 function getCurrentDateA() {
