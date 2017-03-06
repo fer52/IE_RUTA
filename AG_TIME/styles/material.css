@@ -58,13 +58,13 @@
 **********/
 .button.position-right{
 color: #fff;
-    position: absolute;
+    position: fixed;
     bottom: 0px;
     right: 13px;
 }
 .button.position-left{
 color: #fff;
-    position: absolute;
+    position: fixed;
     bottom: 0px;
     left: 15px;
 }
@@ -88,13 +88,16 @@ color: #fff;
   -webkit-transition: all, 250ms ease;
   transition: all, 250ms ease;
 }
+.button.gray{
+ background-color: #DDD;   
+}
 .button.green{
  background-color: #43A047;   
 }
 .button.blue{
  background-color: #1e8eb9;   
 }
-
+/*
 .button.blue:hover {
   background-color: #229fcf;
   box-shadow: 0px 4px 10px 0 rgba(0, 0, 0, 0.1), 0px 2px 10px 0px rgba(0, 0, 0, 0.1);
@@ -113,7 +116,7 @@ color: #fff;
   box-shadow: rgba(0, 0, 0, 0.09804) 0px 4px 10px 0px, rgba(0, 0, 0, 0.09804) 0px 2px 10px 0px;
   -webkit-transform: translate(0, -2px);
           transform: translate(0, -2px);
-}
+}*/
 .button:after {
   position: absolute;
   top: 0;
@@ -137,7 +140,7 @@ color: #fff;
   height: 60px;
   border-radius: 50%;
 }
-.button.circle:hover:after {
+/*.button.circle:hover:after {
   opacity: .4;
   -webkit-transform: scale(0.5);
           transform: scale(0.5);
@@ -164,7 +167,7 @@ color: #fff;
           animation-play-state: paused;
   -webkit-animation-name: none;
           animation-name: none;
-}
+}*/
 .button.rectangle {
   padding: 10px 6px;
   max-width: 180px;

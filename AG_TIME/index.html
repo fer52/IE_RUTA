@@ -27,7 +27,7 @@
                 <a id="logIn" data-role="button" >Ingresar</a>
 
                 <br/><br/>
-                <label>Update 1.0.3</label>
+                <label>Update 1.1.4</label>
             </div>
         </div>
                 
@@ -42,8 +42,14 @@
                     <li data-role="list-divider" role="heading" class="ui-li-divider ui-bar-inherit ui-first-child">
                         RUTA ACTIVA
                     </li>    
+                    <ul id="listAllActive" data-role="listview" data-inset="true">                    
+                    </ul>
+                    <p style="height:60px;"></p>
                 </ul>
         
+                <a id="takePhotoNew"  class='button circle position-right gray'>
+                    <span class="material-icons" style="margin: 12px 0px;">playlist_add_check</span>                    
+                </a>                
             </div>            
         </div>
         
@@ -80,9 +86,19 @@
                 <h1 style="overflow:initial">AGENSE DOMICILIO</h1>
             </div>
             <div data-role="content" style="padding-top: 5%;">                
-                <h1>Entregas</h1>
-                <ul id="listAllNew" data-role="listview">
-                    <!--<li data-role="list-divider" role="heading" class="ui-li-divider ui-bar-inherit ui-first-child">
+                <!--<h1>Entregas</h1>-->
+                <ul data-role="listview">
+                    <li data-role="list-divider" role="heading" class="ui-li-divider ui-bar-inherit ui-first-child">
+                        RUTA NUEVA
+                    </li>    
+                    <li>
+                        <ul id="listAllNew" data-role="listview" data-inset="true">                    
+                        </ul>
+                        <p style="height:60px;"></p>
+                    </li>
+                </ul>
+                
+                <!--<li data-role="list-divider" role="heading" class="ui-li-divider ui-bar-inherit ui-first-child">
                         ENTREGAS                                
                     </li>    
                     <li>
@@ -90,13 +106,13 @@
                             
                         </ul>
                     </li<>-->
-                </ul>
-                <a id="saveRoute" class='button circle position-left green'>&check;</a>
-                <a id="newItem"  class='button circle position-right blue'>&plus;</a>                               
+                                      
                 
                 <!--<div class="content" id="result">
                 </div>-->
-            </div>            
+                <a id="saveRoute" class='button circle position-left green'>&check;</a>
+                <a id="newItem"  class='button circle position-right blue'>&plus;</a>       
+            </div>                          
         </div>
         
         <div id="newItemRoute" data-role="page" >
@@ -109,10 +125,12 @@
                 <div style="position:absolute;height:100%;width:90%">
                     <h1>Nuevo Ingreso</h1>
                     Código
-                    <input type="text" name="code" />        
-                    <img id="previewTakePhoto" src="#" style="width:100px;height:100px;">
+                    <input id="newCode" type="text" name="code" />
+                    Vista Previa
+                    <img id="previewTakePhoto" src="" style="width:300px;height:200px;" />
                 </div>
-                <a id="takePhotoNew"  class='button circle position-right blue'>
+                <a id="saveNewItem" class='button circle position-left green'>&check;</a>
+                <a id="takePhotoNewItem" href="#" class='button circle position-right blue'>
                     <span class="material-icons" style="margin: 10px 0px;">camera_enhance</span>                    
                 </a>                
             </div>            
