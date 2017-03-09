@@ -27,14 +27,14 @@
                 <a id="logIn" data-role="button" >Ingresar</a>
 
                 <br/><br/>
-                <label>Update 1.1.4</label>
+                <label>Update 1.1.7</label>
             </div>
         </div>
                 
         <div id="pageactive" data-role="page" >
             <div data-role="header" class="mt-header" data-position="fixed" data-tap-toggle="false">
                 <!--<span class="material-icons" style="position:absolute">arrow_back</span>-->
-                <span id="moveSettings" class="material-icons" style="position:absolute;right:0px">menu</span>
+                <!--<span id="moveSettings" class="material-icons" style="position:absolute;right:0px">menu</span>-->
                 <h1 style="overflow:initial">AGENSE DOMICILIO </h1>
             </div>
             <div data-role="content" style="padding-top: 5%;">
@@ -47,13 +47,24 @@
                     <p style="height:60px;"></p>
                 </ul>
         
-                <a id="takePhotoNew"  class='button circle position-right gray'>
+                <span style="bottom:85px" class="textButton position-right">Nueva Ruta</span>
+                <a id="routeButton" style="bottom:65px"  class='button circle position-right blue'>
+                    <span class="material-icons" style="margin: 12px 0px;">add</span>
+                </a>               
+                
+                <span style="bottom:25px" class="textButton position-right">Historial</span>
+                <a id="historyButton"   class='button circle position-right orange'>
+                    <span class="material-icons" style="margin: 12px 0px;">history</span>
+                </a>
+                
+                
+                <!--<a id="listComplete"  class='button circle position-right gray'>
                     <span class="material-icons" style="margin: 12px 0px;">playlist_add_check</span>                    
-                </a>                
+                </a>-->                
             </div>            
         </div>
         
-        <div id="pagesettings" data-role="page" >
+        <!--<div id="pagesettings" data-role="page" >
             <div data-role="header" class="mt-header" data-position="fixed" data-tap-toggle="false">
                 <span id="returnAcive" class="material-icons" style="position:absolute">arrow_back</span>
                 <h1 style="overflow:initial">AGENSE DOMICILIO</h1>
@@ -64,21 +75,14 @@
                             NUEVA RUTA
                     <input type="button" data-enhanced="true" id="routeButton" value="entregado">                                            
                 </div>
-                <!--<div style="padding:3em;background:#00BCD4" class="ui-input-btn ui-btn ">
-                    <span class="material-icons mt-iconmenu">assignment_turned_in</span>
-                            RUTA ACTIVA
-                    <input type="button" data-enhanced="true" id="routeActiveButton" value="entregado">                        
-                </div>-->
                 <div style="padding:3em;background:#009688" class="ui-input-btn ui-btn">
                     <span class="material-icons mt-iconmenu">history</span>
                             HISTORIAL
                     <input type="button" data-enhanced="true" id="historyButton" value="entregado">                        
                 </div>
                 
-                <!--<div class="content" id="result">
-                </div>-->
             </div>            
-        </div>
+        </div>-->
         
         <div id="newroute" data-role="page" >
             <div data-role="header" class="mt-header" data-position="fixed" data-tap-toggle="false">
@@ -98,18 +102,6 @@
                     </li>
                 </ul>
                 
-                <!--<li data-role="list-divider" role="heading" class="ui-li-divider ui-bar-inherit ui-first-child">
-                        ENTREGAS                                
-                    </li>    
-                    <li>
-                        <ul id="listItemsNew" data-role="listview">
-                            
-                        </ul>
-                    </li<>-->
-                                      
-                
-                <!--<div class="content" id="result">
-                </div>-->
                 <a id="saveRoute" class='button circle position-left green'>&check;</a>
                 <a id="newItem"  class='button circle position-right blue'>&plus;</a>       
             </div>                          

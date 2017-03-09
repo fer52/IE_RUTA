@@ -54,6 +54,33 @@
 *************/
 /* MIXINS
 *********/
+
+/*TEXT BUTTON
+**********/
+.textButton {
+  display: block;
+  position: relative;
+  margin: 1rem auto;
+  overflow: hidden;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  cursor: pointer;
+  /*color: white;  */
+  /*text-align: center;*/
+  text-decoration: none;
+  text-transform: uppercase;
+  /*box-shadow: rgba(0, 0, 0, 0.14902) 0px 1px 1px 0px, rgba(0, 0, 0, 0.09804) 0px 1px 2px 0px;
+  -webkit-transition: all, 250ms ease;
+  transition: all, 250ms ease;*/
+}
+.textButton.position-right{
+/*color: #fff;*/
+    position: fixed;
+    bottom: 0px;
+    right: 80px;
+}
 /* BUTTONS
 **********/
 .button.position-right{
@@ -96,6 +123,9 @@ color: #fff;
 }
 .button.blue{
  background-color: #1e8eb9;   
+}
+.button.orange{
+ background-color: #F79707;   
 }
 /*
 .button.blue:hover {

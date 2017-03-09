@@ -132,7 +132,7 @@ App.prototype = {
         
         document.getElementById("returnsettings").addEventListener("click",
                                     function() { 
-                                        $.mobile.changePage("#pagesettings", { transition: "flip" });
+                                        $.mobile.changePage("#pageactive", { transition: "flip" });
                                     });
         
         //estado entrega
@@ -152,14 +152,14 @@ App.prototype = {
         that._destinationType = navigator.camera.DestinationType;
         
         //trasladar a menu de acciones
-        document.getElementById("moveSettings").addEventListener("click",
+        /*document.getElementById("moveSettings").addEventListener("click",
                                     function() { 
                                         $.mobile.changePage("#pagesettings", { transition: "flip" });
-                                    });
-        document.getElementById("returnAcive").addEventListener("click",
+                                    });*/
+        /*document.getElementById("returnAcive").addEventListener("click",
                                     function() { 
                                         $.mobile.changePage("#pageactive", { transition: "flip" });
-                                    });
+                                    });*/
         
         //nueva ruta
         document.getElementById("saveRoute").addEventListener("click",
@@ -358,6 +358,7 @@ App.prototype = {
 
 //actualiza estado item
 function updateStateItemActive(){
+    
     /*localStorageActive.forEach(function(item,index){       
         if(item.code === currentItemDelivery){
             item.d = 1;
@@ -366,8 +367,14 @@ function updateStateItemActive(){
             item.dfecha= getCurrentDateA();
             item.dhora=getCurrentHour();
         }
-    })*/            
-    $("#delivery-"+currentItemDelivery).css('display','block');  
+    })*/ 
+    /*currentItemDelivery.d = 1;
+    currentItemDelivery.dimagenUri = imagenURI;
+    currentItemDelivery.dposition = geoItem;
+    currentItemDelivery.dfecha= getCurrentDateA();
+    currentItemDelivery.dhora=getCurrentHour();*/
+    
+    $("#delivery-"+currentItemDelivery.code).css('display','block');  
     currentItemDelivery='';
 }
 
@@ -455,7 +462,7 @@ function moveStep(code){
                 showAlert('Llego a destino');
             }else if(item.d === 0){
                 //entregado                ;                
-                currentItemDelivery = code;
+                currentItemDelivery = item;
                 app._capturePhoto();                
             }
             /*else if(item.f == 0){
@@ -467,38 +474,6 @@ function moveStep(code){
     });
     
 }
-
-
-/*//toma foto
-function capturePhotoVoucher (code) {
-    alert(1);
-    currentItemDelivery = code;
-    // Take picture using device camera and retrieve image as base64-encoded string.
-    navigator.camera.getPicture(onPhotoVoucherSuccess, onFailVoucher, {
-                                    //quality: 30,
-                                    destinationType: App._destinationType.FILE_URI, //DATA_URL
-                                    targetWidth: 800,
-                                    targetHeight: 600
-                                    //sourceType: navigator.camera.PictureSourceType.SAVEDPHOTOALBUM 
-                                });
-}
-function onPhotoVaucherSuccess (imageURI) {
-    localStorageActive.forEach(function(item,index){       
-        if(item.code == currentItemDelivery){
-            item.d = 1;
-            item.dimagenUri = imagenURI;
-            item.dposition = geoItem;
-            item.dfecha= getCurrentDateA();
-            item.dhora=getCurrentHour();
-        }
-    })
-    $("#delivery-"+currentItemDelivery).css('display','block');                
-    //currentItem.imageURI = imageURI;        
-}
-
-function onFailVoucher(message) {    
-    showAlert(message);
-}*/
 
 
 function getCurrentDateA() {
