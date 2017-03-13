@@ -82,6 +82,11 @@
     bottom: 0px;
     right: 80px;
 }
+
+.disabledButton{
+    background: #B0BEC5 !important;
+}
+
 /* BUTTONS
 **********/
 .button.position-right{

@@ -64,7 +64,7 @@ App.prototype = {
         });
         
         //paginas
-        $('#newroute').on('pagebeforeshow',function(){
+        $('#pageactive').on('pagebeforecreate',function(){
             var lsNew = localStorage.getItem('listActive');
             
             if(lsNew == '' || lsNew == undefined){
@@ -162,11 +162,11 @@ App.prototype = {
                                     });
         document.getElementById("moveStepArrive").addEventListener("click",
                                     function() { 
-                                        moveStep();
+                                        moveStep(1);
                                     });
         document.getElementById("moveStepDelivery").addEventListener("click",
                                     function() { 
-                                        moveStep();
+                                        moveStep(2);
                                     });
                 
         
@@ -290,7 +290,7 @@ App.prototype = {
         //$.mobile.changePage("#decision", { transition: "flip" });        
         //console.log(currentItem.imagenURI);
         
-        if(currentItemDelivery != ''){
+        if(currentCodeMoveStep != null){
             updateStateItemActive(imageURI);
         }else{
             document.getElementById('previewTakePhoto').src = imageURI;
@@ -323,24 +323,14 @@ App.prototype = {
 
 
 //actualiza estado item
-function updateStateItemActive(imageURI){
-    
-    /*localStorageActive.forEach(function(item,index){       
-        if(item.code === currentItemDelivery){
-            item.d = 1;
-            item.dimagenUri = imagenURI;
-            item.dposition = geoItem;
-            item.dfecha= getCurrentDateA();
-            item.dhora=getCurrentHour();
-        }
-    })*/ 
+function updateStateItemActive(imagenURI){
+
     currentCodeMoveStep.d = 1;
     currentCodeMoveStep.dimagenUri = imagenURI;
     currentCodeMoveStep.dposition = geoItem;
     currentCodeMoveStep.dfecha= getCurrentDateA();
     currentCodeMoveStep.dhora=getCurrentHour();
-    
-    $("#delivery-"+currentCodeMoveStep.code).css('display','block');  
+    $("#delivery-" + currentCodeMoveStep.code).css('display','block');  
     currentCodeMoveStep=null;
     
     $.mobile.changePage("#pageactive", { transition: "flip" });
@@ -388,16 +378,21 @@ function updateStore(object,idStore){
 function createListActive(){
     $('#listAllActive').empty();
     localStorageActive.forEach(function(item,index){
-        addItemListActive(item.code);
+        addItemListActive(item);
     });
     $('#listAllActive').listview('refresh');
 };
-function addItemListActive(code){
+function addItemListActive(item){
     var list = $('#listAllActive');
-    //<a href="#"></a>
-    var icons = '<span id="delivery-'+ code +'" class="material-icons" style="display:none;margin: 12px 0px;float:right;font-size:24px;color:green">done_all</span><span id="arrive-'+ code +'" class="material-icons" style="display:none;margin: 12px 0px;float:right;font-size:24px;color:red">room</span><span id="store-'+ code +'" class="material-icons" style="margin: 12px 0px;float:right;font-size:24px;color:blue">store</span>';
+    
+    var showItemD = item.d===1 ? '' : 'display:none;',
+    showItemA = item.a===1 ? '' : 'display:none;';
+    
+    var code = item.code;
+    var icons = '<span id="delivery-'+ code +'" class="material-icons" style="' + showItemD + 'margin: 12px 0px;float:right;font-size:24px;color:green">done_all</span><span id="arrive-'+ code +'" class="material-icons" style="' + showItemA + 'margin: 12px 0px;float:right;font-size:24px;color:red">room</span><span id="store-'+ code +'" class="material-icons" style="margin: 12px 0px;float:right;font-size:24px;color:blue">store</span>';
     list.append('<li onclick="moveToStep(\'' + code + '\')" id="itemNew-'+ code +'" data-icon="false"><a href="#">' + code + icons + '</a></li>');            
-} //onclick="moveStep(\'' + code + '\')"
+}
+
 //mantenimiento a lista nueva
 function createListNew(){
     $('#listAllNew').empty();
@@ -413,28 +408,34 @@ function addItemListNew(code){
 }
 
 //var currentCodeMoveStep;
-var currentCodeMoveStep;
+var currentCodeMoveStep = null;
+var indexCurrent = -1;
 function moveToStep(code){
     
-    alert(code);
-    
     //var code = currentCodeMoveStep;
+    indexCurrent = -1;
     localStorageActive.forEach(function(item,index){
        
-        if(item.code == code){
-            currentCodeMoveStep = item;                             
+        if(item.code === code){
+            indexCurrent = index;
+            //currentCodeMoveStep = item;                             
         }        
     });
-    alert('btn');
+    
+    currentCodeMoveStep = localStorageActive[indexCurrent];
+    
     if(currentCodeMoveStep && (currentCodeMoveStep.a === 0 || currentCodeMoveStep.d === 0)){
         
-        document.getElementById('moveStepArrive').disabled = true;
-        document.getElementById('moveStepDelivery').disabled = true;
-        
-        if(item.a === 0){
-            document.getElementById('moveStepArrive').disabled = false;        
-        }else if(item.d === 0){
-            document.getElementById('moveStepDelivery').disabled = false;        
+        //document.getElementById('moveStepArrive').disabled = true;
+        //document.getElementById('moveStepDelivery').disabled = true;
+        $("#btnMoveStepArrive").addClass('disabledButton');
+        $("#btnMoveStepDelivery").addClass('disabledButton');
+        if(currentCodeMoveStep.a === 0){
+            //document.getElementById('moveStepArrive').disabled = false;        
+            $("#btnMoveStepArrive").removeClass('disabledButton');
+        }else if(currentCodeMoveStep.d === 0){
+            $("#btnMoveStepDelivery").removeClass('disabledButton');
+            //document.getElementById('moveStepDelivery').disabled = false;        
         }
         $.mobile.changePage("#pageStep", { transition: "flip" });           
     }
@@ -445,45 +446,25 @@ function moveToStep(code){
 function moveStep(){
     
     //var code = currentCodeMoveStep;
+    //alert('m')
+    /*alert(currentCodeMoveStep.code);
+    alert(JSON.stringify(localStorageActive[indexCurrent]));
+    currentCodeMoveStep = localStorageActive[indexCurrent];*/
     if(currentCodeMoveStep.a === 0){
         currentCodeMoveStep.a = 1;
         currentCodeMoveStep.aposition = geoItem;
         currentCodeMoveStep.afecha= getCurrentDateA();
         currentCodeMoveStep.ahora=getCurrentHour();
         
-        $("#arrive-"+code).css('display','block');
+        $("#arrive-"+currentCodeMoveStep.code).css('display','block');
         
         $.mobile.changePage("#pageactive", { transition: "flip" });
-    }else if(item.d === 0){
+    }else if(currentCodeMoveStep.d === 0){
         //entregado                ;                
         //currentItemDelivery = item;
         app._capturePhoto();                
     } 
-    
-    /*localStorageActive.forEach(function(item,index){
-       
-        if(item.code == code){
-            
-            if(item.a === 0){
-                item.a = 1;
-                item.aposition = geoItem;
-                item.afecha= getCurrentDateA();
-                item.ahora=getCurrentHour();
-                
-                $("#arrive-"+code).css('display','block');
-                
-                //showAlert('Llego a destino');
-                $.mobile.changePage("#pageactive", { transition: "flip" });
-            }else if(item.d === 0){
-                //entregado                ;                
-                currentItemDelivery = item;
-                app._capturePhoto();                
-            }            
-            
-        }
-        
-    });*/
-       
+          
 }
 
 
