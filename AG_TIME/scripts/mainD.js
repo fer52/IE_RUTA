@@ -156,10 +156,19 @@ App.prototype = {
                                     function() { 
                                         $.mobile.changePage("#pagesettings", { transition: "flip" });
                                     });*/
-        /*document.getElementById("returnAcive").addEventListener("click",
+        document.getElementById("returnAcive").addEventListener("click",
                                     function() { 
                                         $.mobile.changePage("#pageactive", { transition: "flip" });
-                                    });*/
+                                    });
+        document.getElementById("moveStepArrive").addEventListener("click",
+                                    function() { 
+                                        moveStep();
+                                    });
+        document.getElementById("moveStepDelivery").addEventListener("click",
+                                    function() { 
+                                        moveStep();
+                                    });
+                
         
         //nueva ruta
         document.getElementById("saveRoute").addEventListener("click",
@@ -282,7 +291,7 @@ App.prototype = {
         //console.log(currentItem.imagenURI);
         
         if(currentItemDelivery != ''){
-            updateStateItemActive();
+            updateStateItemActive(imageURI);
         }else{
             document.getElementById('previewTakePhoto').src = imageURI;
         }
@@ -291,50 +300,7 @@ App.prototype = {
     _onFail: function(message) {
         showAlert(message);
     },
-      //capture photo comprobante
-    /*_capturePhotoVoucher: function() {
-        var that = this;
-        // currentItemDelivery = code;
-        // Take picture using device camera and retrieve image as base64-encoded string.
-        console.log('tv');
-        navigator.camera.getPicture(function() {
-            //that._uploadPhoto.apply(that, arguments);
-            console.log('pict');
-            app._onPhotoVSuccess.apply(app, arguments);
-        }, function() {
-            app._onFailVoucher.apply(app, arguments);
-        }, {
-                                        //quality: 30,
-                                        destinationType: that._destinationType.FILE_URI, //DATA_URL
-                                        targetWidth: 800,
-                                        targetHeight: 600
-                                        //sourceType: navigator.camera.PictureSourceType.SAVEDPHOTOALBUM 
-                                    });
-    },*/
-    /*_onPhotoVSuccess: function(imageURI) {
-        //currentItem.imageURI = imageURI;
-           
-        //$.mobile.changePage("#decision", { transition: "flip" });        
-        //console.log(currentItem.imagenURI);
-        //document.getElementById('previewTakePhoto').src = imageURI;
-        //showAlert('Fotografía de comprobante');
-        console.log('success photo',imageURI);
-        console.log(currentItemDelivery)
-        localStorageActive.forEach(function(item,index){       
-            if(item.code === currentItemDelivery){
-                item.d = 1;
-                item.dimagenUri = imagenURI;
-                item.dposition = geoItem;
-                item.dfecha= getCurrentDateA();
-                item.dhora=getCurrentHour();
-            }
-        })
-        $("#delivery-"+currentItemDelivery).css('display','block');   
-        
-    },
-    _onFailVoucher: function(message) {
-        showAlert(message);
-    },*/
+   
     //crea nueva ruta
      _createRouteActive:function(){
          
@@ -357,7 +323,7 @@ App.prototype = {
 
 
 //actualiza estado item
-function updateStateItemActive(){
+function updateStateItemActive(imageURI){
     
     /*localStorageActive.forEach(function(item,index){       
         if(item.code === currentItemDelivery){
@@ -368,14 +334,16 @@ function updateStateItemActive(){
             item.dhora=getCurrentHour();
         }
     })*/ 
-    /*currentItemDelivery.d = 1;
-    currentItemDelivery.dimagenUri = imagenURI;
-    currentItemDelivery.dposition = geoItem;
-    currentItemDelivery.dfecha= getCurrentDateA();
-    currentItemDelivery.dhora=getCurrentHour();*/
+    currentCodeMoveStep.d = 1;
+    currentCodeMoveStep.dimagenUri = imagenURI;
+    currentCodeMoveStep.dposition = geoItem;
+    currentCodeMoveStep.dfecha= getCurrentDateA();
+    currentCodeMoveStep.dhora=getCurrentHour();
     
-    $("#delivery-"+currentItemDelivery.code).css('display','block');  
-    currentItemDelivery='';
+    $("#delivery-"+currentCodeMoveStep.code).css('display','block');  
+    currentCodeMoveStep=null;
+    
+    $.mobile.changePage("#pageactive", { transition: "flip" });
 }
 
 //funcionalidad de borrado de elementos
@@ -428,8 +396,8 @@ function addItemListActive(code){
     var list = $('#listAllActive');
     //<a href="#"></a>
     var icons = '<span id="delivery-'+ code +'" class="material-icons" style="display:none;margin: 12px 0px;float:right;font-size:24px;color:green">done_all</span><span id="arrive-'+ code +'" class="material-icons" style="display:none;margin: 12px 0px;float:right;font-size:24px;color:red">room</span><span id="store-'+ code +'" class="material-icons" style="margin: 12px 0px;float:right;font-size:24px;color:blue">store</span>';
-    list.append('<li onclick="moveStep(\'' + code + '\')" id="itemNew-'+ code +'" data-icon="false"><a href="#">' + code + icons + '</a></li>');            
-}
+    list.append('<li onclick="moveToStep(\'' + code + '\')" id="itemNew-'+ code +'" data-icon="false"><a href="#">' + code + icons + '</a></li>');            
+} //onclick="moveStep(\'' + code + '\')"
 //mantenimiento a lista nueva
 function createListNew(){
     $('#listAllNew').empty();
@@ -444,10 +412,55 @@ function addItemListNew(code){
     list.append('<li id="itemNew-'+ code +'" data-icon="info"><span onclick="removeItem(\'' + code + '\')" class="material-icons" style="float: left;color:red">remove_circle</span><a href="#">' + code +  '</a></li>');            
 }
 
-//busca item activo para siguiente paso
-function moveStep(code){
+//var currentCodeMoveStep;
+var currentCodeMoveStep;
+function moveToStep(code){
     
+    alert(code);
+    
+    //var code = currentCodeMoveStep;
     localStorageActive.forEach(function(item,index){
+       
+        if(item.code == code){
+            currentCodeMoveStep = item;                             
+        }        
+    });
+    alert('btn');
+    if(currentCodeMoveStep && (currentCodeMoveStep.a === 0 || currentCodeMoveStep.d === 0)){
+        
+        document.getElementById('moveStepArrive').disabled = true;
+        document.getElementById('moveStepDelivery').disabled = true;
+        
+        if(item.a === 0){
+            document.getElementById('moveStepArrive').disabled = false;        
+        }else if(item.d === 0){
+            document.getElementById('moveStepDelivery').disabled = false;        
+        }
+        $.mobile.changePage("#pageStep", { transition: "flip" });           
+    }
+         
+}
+
+//busca item activo para siguiente paso
+function moveStep(){
+    
+    //var code = currentCodeMoveStep;
+    if(currentCodeMoveStep.a === 0){
+        currentCodeMoveStep.a = 1;
+        currentCodeMoveStep.aposition = geoItem;
+        currentCodeMoveStep.afecha= getCurrentDateA();
+        currentCodeMoveStep.ahora=getCurrentHour();
+        
+        $("#arrive-"+code).css('display','block');
+        
+        $.mobile.changePage("#pageactive", { transition: "flip" });
+    }else if(item.d === 0){
+        //entregado                ;                
+        //currentItemDelivery = item;
+        app._capturePhoto();                
+    } 
+    
+    /*localStorageActive.forEach(function(item,index){
        
         if(item.code == code){
             
@@ -459,20 +472,18 @@ function moveStep(code){
                 
                 $("#arrive-"+code).css('display','block');
                 
-                showAlert('Llego a destino');
+                //showAlert('Llego a destino');
+                $.mobile.changePage("#pageactive", { transition: "flip" });
             }else if(item.d === 0){
                 //entregado                ;                
                 currentItemDelivery = item;
                 app._capturePhoto();                
-            }
-            /*else if(item.f == 0){
-                
-            }*/
+            }            
             
         }
         
-    });
-    
+    });*/
+       
 }
 
 
