@@ -93,7 +93,7 @@ App.prototype = {
                                    $.ajax({
                                               type: "POST",
                                               dataType: "json",
-                                              url: "http://agensedashboard.websolutions.com.gt/login.php",
+                                              url: "http://agensedomicilio.agense.net/login.php",
                                               crossDomain: true,
                                               data: JSON.stringify(parametro),
                                               cache: false,
@@ -312,6 +312,31 @@ App.prototype = {
          
         if(localStorageNew.length > 0){
              
+           /* $.ajax({
+              type: "POST",
+              dataType: "json",
+              url: "http://agensedomicilio.agense.net/login.php",
+              crossDomain: true,
+              data: JSON.stringify(parametro),
+              cache: false,
+              success: function (info) {
+                  $.mobile.loading("hide")
+                  if (info.success) {
+                      //localStorageApp.insertVariable('sessionDate', getCurrentDateA());
+                      watchPosition();
+                      localStorageAppLogin = getCurrentDateA();
+                      
+                      $.mobile.changePage("#pageactive", { transition: "flip" });
+                  }else {
+                      showAlert('Usuario o contraseña incorrecta');
+                  }                                                  
+              },
+              error: function (msg) {
+                  $.mobile.loading("hide")
+                  alert(msg);
+              }
+          });*/
+            
             localStorageActive = localStorageNew;
             localStorageNew = [];
             localStorage.setItem('listNew','');

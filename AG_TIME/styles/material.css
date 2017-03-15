@@ -82,6 +82,13 @@
     bottom: 0px;
     right: 80px;
 }
+.textButton.position-left{
+/*color: #fff;*/
+    position: fixed;
+    bottom: 0px;
+    left: 80px;
+}
+
 
 .disabledButton{
     background: #B0BEC5 !important;
