@@ -27,17 +27,27 @@
                 <a id="logIn" data-role="button" >Ingresar</a>
 
                 <br/><br/>
-                <label>Update 1.2.0</label>
+                <label>Update 1.2.1</label>
             </div>
         </div>
                 
         <div id="pageactive" data-role="page" >
+            <div id="modalFinished" style="display:none;position:fixed;width:100%;height:100%;border: 0px solid blue;z-index: 99;background: rgba(0, 0, 0, 0.8);overflow: hidden;">
+                <div id="btnFinished" style="position: fixed;margin-top: 25%;width: 100%;padding:3em;background:#46B559" class="ui-input-btn ui-btn ">                    
+                    <span class="material-icons mt-iconmenu">clear_all</span>
+                    <span style="float:right">Finalizar Ruta</span><br/>
+                    <span style="float:right">Ingresar Comprobante</span>
+                    <input type="button" data-enhanced="true" id="moveFinished" value="arrive">                                            
+                </div>
+            </div>
+            
             <div data-role="header" class="mt-header" data-position="fixed" data-tap-toggle="false">
                 <!--<span class="material-icons" style="position:absolute">arrow_back</span>-->
                 <!--<span id="moveSettings" class="material-icons" style="position:absolute;right:0px">menu</span>-->
                 <h1 style="overflow:initial">AGENSE DOMICILIO </h1>
             </div>
             <div data-role="content" style="padding-top: 5%;">
+                
                 <ul data-role="listview">
                     <li data-role="list-divider" role="heading" class="ui-li-divider ui-bar-inherit ui-first-child">
                         RUTA ACTIVA

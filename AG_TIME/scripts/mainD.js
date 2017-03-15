@@ -146,6 +146,10 @@ App.prototype = {
                                     });
         
         
+        document.getElementById('moveFinished').addEventListener("click",
+                                    function() { 
+                                        finishList();    
+                                    });
         
         //camera        
         //alert(navigator.camera);
@@ -290,7 +294,9 @@ App.prototype = {
         //$.mobile.changePage("#decision", { transition: "flip" });        
         //console.log(currentItem.imagenURI);
         
-        if(currentCodeMoveStep != null){
+        if(isFinish){
+            finishedList(imageURI);
+        }else if(currentCodeMoveStep != null){
             updateStateItemActive(imageURI);
         }else{
             document.getElementById('previewTakePhoto').src = imageURI;
@@ -332,8 +338,41 @@ function updateStateItemActive(imagenURI){
     currentCodeMoveStep.dhora=getCurrentHour();
     $("#delivery-" + currentCodeMoveStep.code).css('display','block');  
     currentCodeMoveStep=null;
+        
+    //indexCurrent = -1;
+    var isCompleate = true;
+    localStorageActive.forEach(function(item,index){
+       
+        if(item.a === 1 && item.d === 1){
+            
+        }else{
+            isCompleate = false;
+        }        
+        
+    });
+    
+    if(isCompleate){
+        $("#modalFinished").css('display','block');
+    }
     
     $.mobile.changePage("#pageactive", { transition: "flip" });
+}
+
+//finaliza ruta
+isFinish = false;
+function finishList(){
+    isFinish = true;
+    app._capturePhoto();         
+    
+}
+function finishedList(){
+    localStorageActive = [];
+    
+    createListActive();
+    
+    $("#modalFinished").css('display','none');    
+    isFinish = false;
+    showAlert('Ruta Finalizada');
 }
 
 //funcionalidad de borrado de elementos
@@ -443,13 +482,8 @@ function moveToStep(code){
 }
 
 //busca item activo para siguiente paso
-function moveStep(){
-    
-    //var code = currentCodeMoveStep;
-    //alert('m')
-    /*alert(currentCodeMoveStep.code);
-    alert(JSON.stringify(localStorageActive[indexCurrent]));
-    currentCodeMoveStep = localStorageActive[indexCurrent];*/
+function moveStep(ind){
+
     if(currentCodeMoveStep.a === 0){
         currentCodeMoveStep.a = 1;
         currentCodeMoveStep.aposition = geoItem;
