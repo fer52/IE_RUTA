@@ -64,7 +64,7 @@ App.prototype = {
         });
         
         //paginas
-        $('#pageactive').on('pagebeforecreate',function(){
+        $('#pageactive').on('pageload',function(){
             var lsNew = localStorage.getItem('listActive');
             
             if(lsNew == '' || lsNew == undefined){
