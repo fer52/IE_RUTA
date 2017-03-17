@@ -27,6 +27,8 @@ var currentItem = {
     request: 0    
 };
 
+var user;
+
 var geoItem = {
     latitude:0,
     longitude:0   
@@ -235,6 +237,9 @@ App.prototype = {
         $('#listAllNew').listview('refresh');
         
         var itemNew ={
+          uuid: guid(),
+          uuidr: '',
+          user: user,
           code: code.value,
           imagenUri: currentItem.imageURI,
           position: geoItem,
@@ -337,10 +342,21 @@ App.prototype = {
               }
           });*/
             
+            var uuidR = guid();
+            localStorageNew.forEach(function(item,index){
+                item.uuidr = uuidR;
+                item.plat= geoItem.latitude;
+                item.plon= geoItem.longitude;
+                item.f= getCurrentDateA();
+                item.h=getCurrentHour();
+            })
+            
             localStorageActive = localStorageNew;
             localStorageNew = [];
             localStorage.setItem('listNew','');
             localStorage.setItem('listActive',JSON.stringify(localStorageActive));
+            
+            saveListActive();
             
             $('#listAllNew').empty();
             $('#listAllNew').listview('refresh');
@@ -352,6 +368,34 @@ App.prototype = {
      }
 };
 
+function saveListActive(){
+        
+    $.ajax({
+              type: "POST",
+              dataType: "json",
+              url: "http://agensedomicilio.agense.net/uploadDataActive.php",
+              crossDomain: true,
+              data: JSON.stringify(localStorageActive),
+              cache: false,
+              success: function (info) {
+                  $.mobile.loading("hide")
+                  if (info.success) {
+                      //localStorageApp.insertVariable('sessionDate', getCurrentDateA());
+                      //watchPosition();
+                      //localStorageAppLogin = getCurrentDateA();
+                      
+                      //$.mobile.changePage("#pageactive", { transition: "flip" });
+                  }else {
+                      //showAlert('Usuario o contraseña incorrecta');
+                  }                                                  
+              },
+              error: function (msg) {
+                 // $.mobile.loading("hide")
+                  //alert(msg);
+              }
+          });
+    
+}
 
 //actualiza estado item
 function updateStateItemActive(imagenURI){
@@ -572,3 +616,12 @@ function showAlert(text) {
         );           
 }
 
+function guid() {
+  function s4() {
+    return Math.floor((1 + Math.random()) * 0x10000)
+      .toString(16)
+      .substring(1);
+  }
+  return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+    s4() + '-' + s4() + s4() + s4();
+}
