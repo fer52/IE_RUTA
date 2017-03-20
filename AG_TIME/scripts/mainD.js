@@ -351,46 +351,62 @@ App.prototype = {
                 item.h=getCurrentHour();
             })
             
-            localStorageActive = localStorageNew;
+            saveListActive();
+            
+            /*localStorageActive = localStorageNew;
             localStorageNew = [];
             localStorage.setItem('listNew','');
             localStorage.setItem('listActive',JSON.stringify(localStorageActive));
             
-            saveListActive();
+            
             
             $('#listAllNew').empty();
             $('#listAllNew').listview('refresh');
                         
             createListActive();
             
-            $.mobile.changePage("#pageactive", { transition: "flip" });
+            $.mobile.changePage("#pageactive", { transition: "flip" });*/
         }
      }
 };
 
 function saveListActive(){
         
+    $.mobile.loading('show', {
+    	text: 'Generando ruta...',
+    	textVisible: true
+    });
+    
     $.ajax({
               type: "POST",
               dataType: "json",
               url: "http://agensedomicilio.agense.net/uploadDataActive.php",
               crossDomain: true,
-              data: JSON.stringify(localStorageActive),
+              data: JSON.stringify(localStorageNew),
               cache: false,
               success: function (info) {
                   $.mobile.loading("hide")
                   if (info.success) {
-                      //localStorageApp.insertVariable('sessionDate', getCurrentDateA());
-                      //watchPosition();
-                      //localStorageAppLogin = getCurrentDateA();
-                      
-                      //$.mobile.changePage("#pageactive", { transition: "flip" });
+                        localStorageActive = localStorageNew;
+                        localStorageNew = [];
+                        localStorage.setItem('listNew','');
+                        localStorage.setItem('listActive',JSON.stringify(localStorageActive));
+                        
+                        
+                        
+                        $('#listAllNew').empty();
+                        $('#listAllNew').listview('refresh');
+                                    
+                        createListActive();
+                        
+                        $.mobile.changePage("#pageactive", { transition: "flip" });
                   }else {
-                      //showAlert('Usuario o contraseña incorrecta');
+                      showAlert('En estos momentos no se puede crear la ruta, inténtelo nuevamente');
                   }                                                  
               },
               error: function (msg) {
-                 // $.mobile.loading("hide")
+                 $.mobile.loading("hide");
+                  showAlert('En estos momentos no se puede crear la ruta, inténtelo nuevamente');
                   //alert(msg);
               }
           });
@@ -402,10 +418,35 @@ function updateStateItemActive(imagenURI){
 
     currentCodeMoveStep.d = 1;
     currentCodeMoveStep.dimagenUri = imagenURI;
-    currentCodeMoveStep.dposition = geoItem;
+    //currentCodeMoveStep.dposition = geoItem;
+    currentCodeMoveStep.dlat= geoItem.latitude;
+    currentCodeMoveStep.dlon= geoItem.longitude;
     currentCodeMoveStep.dfecha= getCurrentDateA();
     currentCodeMoveStep.dhora=getCurrentHour();
-    $("#delivery-" + currentCodeMoveStep.code).css('display','block');  
+    currentCodeMoveStep.dsend = 0;
+    $("#delivery-" + currentCodeMoveStep.code).css('display','block');         
+    
+    //envia información de estado
+        $.ajax({
+              type: "POST",
+              dataType: "json",
+              url: "http://agensedomicilio.agense.net/uploadDataItem.php",
+              crossDomain: true,
+              data: JSON.stringify(currentCodeMoveStep),
+              cache: false,
+              success: function (info) {
+                  $.mobile.loading("hide")
+                  if (info.success) {
+                        //currentCodeMoveStep.dsend = 1;
+                  }else {
+                      
+                  }                                                  
+              },
+              error: function (msg) {                                 
+                  //alert(msg);
+              }
+          });
+    
     currentCodeMoveStep=null;
         
     //indexCurrent = -1;
@@ -554,12 +595,39 @@ function moveToStep(code){
 function moveStep(ind){
 
     if(currentCodeMoveStep.a === 0){
+        //send -1 no se envia 0 pendiente de actualizar 1 actualizado
+        
         currentCodeMoveStep.a = 1;
-        currentCodeMoveStep.aposition = geoItem;
+        //currentCodeMoveStep.aposition = geoItem;
+        currentCodeMoveStep.alat= geoItem.latitude;
+        currentCodeMoveStep.alon= geoItem.longitude;
         currentCodeMoveStep.afecha= getCurrentDateA();
         currentCodeMoveStep.ahora=getCurrentHour();
+        currentCodeMoveStep.asend = 0;
+        currentCodeMoveStep.dsend = -1;
         
         $("#arrive-"+currentCodeMoveStep.code).css('display','block');
+        
+        //envia información de estado
+        $.ajax({
+              type: "POST",
+              dataType: "json",
+              url: "http://agensedomicilio.agense.net/uploadDataItem.php",
+              crossDomain: true,
+              data: JSON.stringify(currentCodeMoveStep),
+              cache: false,
+              success: function (info) {
+                  $.mobile.loading("hide")
+                  if (info.success) {
+                        currentCodeMoveStep.asend = 1;
+                  }else {
+                      
+                  }                                                  
+              },
+              error: function (msg) {                                 
+                  //alert(msg);
+              }
+          });
         
         $.mobile.changePage("#pageactive", { transition: "flip" });
     }else if(currentCodeMoveStep.d === 0){
