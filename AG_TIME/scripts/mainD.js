@@ -75,7 +75,7 @@ App.prototype = {
                 localStorageActive = JSON.parse(lsNew);
             }
                 
-            createListActive()
+            createListActive(false)
         });
         
         //acciones
@@ -392,12 +392,10 @@ function saveListActive(){
                         localStorage.setItem('listNew','');
                         localStorage.setItem('listActive',JSON.stringify(localStorageActive));
                         
-                        
-                        
                         $('#listAllNew').empty();
                         $('#listAllNew').listview('refresh');
                                     
-                        createListActive();
+                        createListActive(true);
                         
                         $.mobile.changePage("#pageactive", { transition: "flip" });
                   }else {
@@ -478,7 +476,7 @@ function finishList(){
 function finishedList(){
     localStorageActive = [];
     
-    createListActive();
+    createListActive(false);
     
     $("#modalFinished").css('display','none');    
     isFinish = false;
@@ -524,10 +522,14 @@ function updateStore(object,idStore){
 }
 
 //mantenimiento a lista activa
-function createListActive(){
+function createListActive(sendDataImage){
     $('#listAllActive').empty();
     localStorageActive.forEach(function(item,index){
         addItemListActive(item);
+        if(sendDataImage){
+            //_uploadDataImage(item.)    
+        }
+        
     });
     $('#listAllActive').listview('refresh');
 };
@@ -606,8 +608,6 @@ function moveStep(ind){
         currentCodeMoveStep.asend = 0;
         currentCodeMoveStep.dsend = -1;
         
-        $("#arrive-"+currentCodeMoveStep.code).css('display','block');
-        
         //envia información de estado
         $.ajax({
               type: "POST",
@@ -629,7 +629,9 @@ function moveStep(ind){
               }
           });
         
+        $("#arrive-"+currentCodeMoveStep.code).css('display','block');
         $.mobile.changePage("#pageactive", { transition: "flip" });
+        
     }else if(currentCodeMoveStep.d === 0){
         //entregado                ;                
         //currentItemDelivery = item;
@@ -684,6 +686,53 @@ function showAlert(text) {
         );           
 }
 
+
+//send Data   
+function _uploadDataImage(uuidRecord,imageURI) {
+    var that = this;
+    
+    //var strCurrentItem = JSON.stringify(currentItem);
+    //navigator.notification.alert(strCurrentItem);
+    
+    var options = new FileUploadOptions();
+    options.fileKey = "file";
+    options.fileName = imageURI.substr(imageURI.lastIndexOf('/') + 1);
+    options.mimeType = "image/jpeg";
+
+    var params = new Object();
+        
+/*    params.iddelivery = requestItem.barCode.substr(0, requestItem.barCode.indexOf('T'));
+    params.barCode = requestItem.barCode;
+    params.d = requestItem.d;
+    params.m = requestItem.m;
+    params.a = requestItem.a;
+    params.h = requestItem.h;
+    params.motivo = requestItem.lagginStatus;
+    params.estado = requestItem.status;
+    params.iduser = requestItem.user;
+    params.latitud = requestItem.latitude;
+    params.longitud = requestItem.longitude;
+ */
+    params.uuidRecord = uuidRecord;
+    
+    options.params = params;
+    options.chunkedMode = false;
+
+    var ft = new FileTransfer();
+    ft.upload(imageURI, "http://agensedomicilio.agense.net/uploadImage.php", imageWin, imageFail, options);               
+    
+    //$.mobile.changePage("#home", { transition: "flip" });
+}
+function imageWin (r) {
+    console.log("Code = " + r.responseCode);
+    console.log("Response = " + r.response);
+    console.log("Sent = " + r.bytesSent);
+    //alert(r.response);
+}
+function imageFail(error) {
+    //alert("An error has occurred: Code = " = error.code);
+}
+
 function guid() {
   function s4() {
     return Math.floor((1 + Math.random()) * 0x10000)
@@ -693,3 +742,5 @@ function guid() {
   return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
     s4() + '-' + s4() + s4() + s4();
 }
+
+
