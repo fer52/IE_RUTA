@@ -27,6 +27,7 @@ var currentItem = {
     request: 0    
 };
 
+var ide='-1';
 var user;
 
 var geoItem = {
@@ -67,6 +68,7 @@ App.prototype = {
         
         //paginas
         $('#pageactive').on('pageload',function(){
+            
             var lsNew = localStorage.getItem('listActive');
             
             if(lsNew == '' || lsNew == undefined){
@@ -108,7 +110,7 @@ App.prototype = {
                                                       
                                                       //localStorage.setItem('dataDelivery', JSON.stringify(dataDelivery));
                                                       //localStorage.getItem('dataDelivery');
-                                                      
+                                                      ide = info.ide;
                                                       $.mobile.changePage("#pageactive", { transition: "flip" });
                                                   }else {
                                                       showAlert('Usuario o contraseña incorrecta');
@@ -344,6 +346,7 @@ App.prototype = {
             
             var uuidR = guid();
             localStorageNew.forEach(function(item,index){
+                item.ide = ide;
                 item.uuidr = uuidR;
                 item.plat= geoItem.latitude;
                 item.plon= geoItem.longitude;
@@ -473,8 +476,11 @@ function finishList(){
     app._capturePhoto();         
     
 }
-function finishedList(){
+function finishedList(imageURI){
     localStorageActive = [];
+    
+    //todo finish
+    _uploadDataImageFinish(localStorageActive[0].uuidr,imageURI);
     
     createListActive(false);
     
@@ -527,9 +533,8 @@ function createListActive(sendDataImage){
     localStorageActive.forEach(function(item,index){
         addItemListActive(item);
         if(sendDataImage){
-            //_uploadDataImage(item.)    
-        }
-        
+            _uploadDataImage(item.uuid)    
+        } 
     });
     $('#listAllActive').listview('refresh');
 };
@@ -686,6 +691,34 @@ function showAlert(text) {
         );           
 }
 
+
+function _uploadDataImageFinish(uuidRecord,imageURI) {
+    var that = this;
+    
+    //var strCurrentItem = JSON.stringify(currentItem);
+    //navigator.notification.alert(strCurrentItem);
+    
+    var options = new FileUploadOptions();
+    options.fileKey = "file";
+    options.fileName = imageURI.substr(imageURI.lastIndexOf('/') + 1);
+    options.mimeType = "image/jpeg";
+
+    var params = new Object();
+        
+    params.uuidRecord = uuidRecord;
+    params.h = getCurrentHour();
+    params.f = getCurrentDateA();
+    params.lon = geoItem.longitude;
+    params.lat = geoItem.latitude;
+    
+    options.params = params;
+    options.chunkedMode = false;
+
+    var ft = new FileTransfer();
+    ft.upload(imageURI, "http://agensedomicilio.agense.net/uploadImageFinish.php", imageWin, imageFail, options);               
+    
+    //$.mobile.changePage("#home", { transition: "flip" });
+}
 
 //send Data   
 function _uploadDataImage(uuidRecord,imageURI) {
