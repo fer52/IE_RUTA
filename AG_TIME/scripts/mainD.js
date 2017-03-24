@@ -147,6 +147,11 @@ App.prototype = {
         historyButton.addEventListener("click",
                                     function() { 
                                         //that._selectedResult(0); 
+                                        createHistory();
+                                    });
+        document.getElementById("returnActiveHistory").addEventListener("click",
+                                    function() { 
+                                        $.mobile.changePage("#pageactive", { transition: "flip" });
                                     });
         
         
@@ -477,10 +482,12 @@ function finishList(){
     
 }
 function finishedList(imageURI){
-    localStorageActive = [];
+    
     
     //todo finish
-    _uploadDataImageFinish(localStorageActive[0].uuidr,imageURI);
+    uploadDataImageFinish(localStorageActive[0].uuidr,imageURI);
+    
+    localStorageActive = [];
     
     createListActive(false);
     
@@ -533,7 +540,7 @@ function createListActive(sendDataImage){
     localStorageActive.forEach(function(item,index){
         addItemListActive(item);
         if(sendDataImage){
-            _uploadDataImage(item.uuid)    
+            uploadDataImage(item.uuid,item.imagenUri);    
         } 
     });
     $('#listAllActive').listview('refresh');
@@ -692,8 +699,8 @@ function showAlert(text) {
 }
 
 
-function _uploadDataImageFinish(uuidRecord,imageURI) {
-    var that = this;
+function uploadDataImageFinish(uuidRecord,imageURI) {
+    //var that = this;
     
     //var strCurrentItem = JSON.stringify(currentItem);
     //navigator.notification.alert(strCurrentItem);
@@ -721,8 +728,8 @@ function _uploadDataImageFinish(uuidRecord,imageURI) {
 }
 
 //send Data   
-function _uploadDataImage(uuidRecord,imageURI) {
-    var that = this;
+function uploadDataImage(uuidRecord,imageURI) {
+    //var that = this;
     
     //var strCurrentItem = JSON.stringify(currentItem);
     //navigator.notification.alert(strCurrentItem);
@@ -776,4 +783,59 @@ function guid() {
     s4() + '-' + s4() + s4() + s4();
 }
 
+function createHistory(){
+ 
+    $.mobile.loading('show', {
+    	text: 'Descargando Historial...',
+    	textVisible: true
+    });
+    
+    
+    var parametro = {"user":user};
+                                   
+       $.ajax({
+                  type: "POST",
+                  dataType: "json",
+                  url: "http://agensedomicilio.agense.net/getHistoryData.php",
+                  crossDomain: true,
+                  data: JSON.stringify(parametro),
+                  cache: false,
+                  success: function (info) {
+                      $.mobile.loading("hide")
+                      if (info.success) {
+                          
+                          
+                          
+                        $('#listAllHistory').empty();
+                        info.data.forEach(function(item,index){
+                            
 
+                            var list = $('#listAllHistory');
+                        
+                            //var showItemD = item.d===1 ? '' : 'display:none;',
+                            //showItemA = item.a===1 ? '' : 'display:none;';
+                            
+                            //var code = item.code;
+                            //var icons = '<span id="delivery-'+ code +'" class="material-icons" style="' + showItemD + 'margin: 12px 0px;float:right;font-size:24px;color:green">done_all</span><span id="arrive-'+ code +'" class="material-icons" style="' + showItemA + 'margin: 12px 0px;float:right;font-size:24px;color:red">room</span><span id="store-'+ code +'" class="material-icons" style="margin: 12px 0px;float:right;font-size:24px;color:blue">store</span>';
+                            list.append('<li  data-icon="false"><a href="#">' + item.ENTREGA + ' - ' + item.FECHA + ' ' + item.HORA + '</a></li>');            
+                                              
+                          
+                            
+                        });
+                        $('#listAllHistory').listview('refresh');
+
+                        
+                          
+                      }else {
+                          //showAlert('Usuario o contraseña incorrecta');
+                      }                                                  
+                  },
+                  error: function (msg) {
+                      $.mobile.loading("hide")
+                      alert(msg);
+                  }
+              });
+
+    $.mobile.changePage("#pageHistory", { transition: "flip" });
+    
+}
