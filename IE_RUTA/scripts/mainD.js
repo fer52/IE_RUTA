@@ -379,13 +379,20 @@ App.prototype = {
 };
 
 function saveListActive(){
-        
-    $.mobile.loading('show', {
-    	text: 'Generando ruta...',
-    	textVisible: true
-    });
     
-    $.ajax({
+    localStorageActive = localStorageNew;
+                        localStorageNew = [];
+                        localStorage.setItem('listNew','');
+                        localStorage.setItem('listActive',JSON.stringify(localStorageActive));
+                        
+                        $('#listAllNew').empty();
+                        $('#listAllNew').listview('refresh');
+                                    
+                        //createListActive(true);
+                        
+                        //$.mobile.changePage("#pageactive", { transition: "flip" });
+    
+    /*$.ajax({
               type: "POST",
               dataType: "json",
               url: "http://agensedomicilio.agense.net/uploadDataActive.php",
@@ -416,7 +423,7 @@ function saveListActive(){
                   //alert(msg);
               }
           });
-    
+    */
 }
 
 //actualiza estado item
