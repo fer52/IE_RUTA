@@ -158,7 +158,10 @@
                 <ul data-role="listview">
                     <li data-role="list-divider" role="heading" class="ui-li-divider ui-bar-inherit ui-first-child">
                         RUTA NUEVA
-                    </li>    
+                    </li>
+                    <li data-role="list-divider" role="heading" class="ui-li-divider ui-bar-inherit ui-first-child">
+                        <input id="nameRoute" type="text" />
+                    </li>
                     <li>
                         <ul id="listAllNew" data-role="listview" data-inset="true">                    
                         </ul>
@@ -191,6 +194,7 @@
                     <input id="tel" type="text" name="code" />
                     Vista Previa
                     <img id="previewTakePhoto" src="" style="width:300px;height:200px;" />
+                    <div style="width:290px;height:300px;" id="map"></div>
                 </div>
                 <a id="saveNewItem" class='button circle position-left green'>&check;</a>
                 <a id="takePhotoNewItem" href="#" class='button circle position-right blue'>
@@ -288,6 +292,8 @@
 
         <script type="text/javascript" charset="utf-8" src="scripts/mainD.js"></script>
         
+        <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAh897eqGQVFrHojFo_w_PzHiEHaJ7gGOY&callback=loadGeo"></script>
+    
         
     </body>
 </html>

@@ -54,6 +54,11 @@ App.prototype = {
             historyButton = document.getElementById("historyButton");
         
         //paginas
+        $('#newItemRoute').on('pageshow',function(){
+            updateDataMap();
+        });
+        
+        //paginas
         $('#newroute').on('pagebeforeshow',function(){
             var lsNew = localStorage.getItem('listNew');
             
@@ -230,7 +235,7 @@ App.prototype = {
         
         //validaciones
         if($.trim(code.value) == ''){
-            showAlert('Debe ingresar código');
+            showAlert('Debe ingresar Nombre');
             return;
         }
         
@@ -388,9 +393,6 @@ function saveListActive(){
                         $('#listAllNew').empty();
                         $('#listAllNew').listview('refresh');
                                     
-                        //createListActive(true);
-                        
-                        //$.mobile.changePage("#pageactive", { transition: "flip" });
     
     /*$.ajax({
               type: "POST",
@@ -845,4 +847,62 @@ function createHistory(){
 
     $.mobile.changePage("#pageHistory", { transition: "flip" });
     
+}
+var map;
+function loadGeo() {
+    if (!map) {
+        //alert('create map')
+        map = new google.maps.Map(document.getElementById('map'), {
+            center: {
+                lat: 14.598385,
+                lng: -90.651017
+            },
+            zoom: 11
+        });
+
+        // var myLatlng = new google.maps.LatLng(-15.363882, 90.044922);
+        //
+        // marker = new google.maps.Marker({
+        //     position: myLatlng,
+        //     title: "Item"
+        // });
+        //
+        // // To add the marker to the map, call setMap();
+        // marker.setMap(map);
+    }
+}
+
+var marker;
+function updateDataMap() {
+
+
+    if (marker && marker.setMap) marker.setMap(null);
+
+    var data={
+        long: geoItem.longitude,
+        lat: geoItem.latitude
+    };
+    
+    if (data.lat !== 0 && data.long !== 0) {
+        var myLatlng = {
+            lat: parseFloat(data.lat),
+            lng: parseFloat(data.long)
+        };
+
+        map.setCenter(new google.maps.LatLng(myLatlng.lat, myLatlng.lng));
+
+        /*marker = new google.maps.Marker({
+            position: myLatLng,
+            map: map,
+            title: 'Hello World!'
+        });*/
+        marker = new google.maps.Marker({
+            position: myLatlng,
+            title: "Hello World!"
+        });
+
+        // To add the marker to the map, call setMap();
+        marker.setMap(map);
+    }
+      
 }
