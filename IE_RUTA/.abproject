@@ -1,0 +1,57 @@
+{
+  "ProjectGuid": "38bc0908-3699-4d09-a8d6-9b137677883e",
+  "ProjectTypeGuids": "{070BCB52-5A75-4F8C-A973-144AF0EAFCC9}",
+  "AppIdentifier": "com.inversioneselmer.rutas",
+  "ProjectName": "IE_RUTA",
+  "AndroidPermissions": [
+    "android.permission.CAMERA",
+    "android.permission.FLASHLIGHT",
+    "android.permission.INTERNET"
+  ],
+  "DeviceOrientations": [
+    "Portrait",
+    "Landscape"
+  ],
+  "iOSStatusBarStyle": "Default",
+  "BundleVersion": "1.0",
+  "AndroidVersionCode": "1",
+  "AndroidHardwareAcceleration": "true",
+  "iOSDeviceFamily": [
+    "1",
+    "2"
+  ],
+  "FrameworkVersion": "4.0.0",
+  "CorePlugins": [
+    "com.phonegap.plugins.barcodescanner@2.0.0",
+    "cordova-plugin-camera",
+    "cordova-plugin-contacts",
+    "cordova-plugin-device",
+    "cordova-plugin-dialogs",
+    "cordova-plugin-file",
+    "cordova-plugin-file-transfer",
+    "cordova-plugin-geolocation",
+    "cordova-plugin-splashscreen",
+    "cordova-plugin-whitelist"
+  ],
+  "DisplayName": "RUTAS",
+  "WP8SupportedResolutions": [
+    "ID_RESOLUTION_WVGA",
+    "ID_RESOLUTION_WXGA",
+    "ID_RESOLUTION_HD720P"
+  ],
+  "Author": "",
+  "WP8Publisher": "",
+  "WP8TileTitle": "",
+  "WP8Capabilities": [],
+  "iOSBackgroundMode": [],
+  "WP8Requirements": [],
+  "Description": "RUTAS",
+  "Framework": "Cordova",
+  "projectVersion": 1,
+  "WP8PublisherID": "{0c335d44-852f-444c-bbcc-50d68fdedd2b}",
+  "WP8ProductID": "{087cec5a-93e4-4111-9ca6-379aa33d056a}",
+  "WP8PackageIdentityName": "1234Telerik.com.telerik.samplebarcodescanner",
+  "WP8WindowsPublisherName": "CN=Telerik",
+  "WPSdk": "8.1",
+  "iOSDeploymentTarget": "6.0"
+}
