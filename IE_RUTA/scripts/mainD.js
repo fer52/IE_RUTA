@@ -55,7 +55,7 @@ App.prototype = {
         
         //paginas
         $('#newItemRoute').on('pageshow',function(){
-            updateDataMap();
+            //updateDataMap();
         });
         
         //paginas
@@ -72,7 +72,7 @@ App.prototype = {
         });
         
         //paginas
-        $('#pageactive').on('pageload',function(){
+        /*$('#pageactive').on('pageload',function(){
             
             var lsNew = localStorage.getItem('listActive');
             
@@ -84,7 +84,7 @@ App.prototype = {
                 
             createListActive(false)
         });
-        
+        */
         //acciones
         logIn = document.getElementById("logIn");        
         logIn.addEventListener("click",
@@ -116,7 +116,7 @@ App.prototype = {
                                                       //localStorage.setItem('dataDelivery', JSON.stringify(dataDelivery));
                                                       //localStorage.getItem('dataDelivery');
                                                       ide = info.ide;
-                                                      $.mobile.changePage("#pageactive", { transition: "flip" });
+                                                      $.mobile.changePage("#newroute", { transition: "flip" });
                                                   }else {
                                                       showAlert('Usuario o contraseña incorrecta');
                                                   }                                                  
