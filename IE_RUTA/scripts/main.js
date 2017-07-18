@@ -57,6 +57,13 @@ App.prototype = {
                                function() { 
                                    //navigator.notification.alert('demo')
                                    $.mobile.loading("show", {
+                                                        text: 'Componente de Cámara no encontrado',
+                                                        textVisible: true,
+                                                        theme: 'a',
+                                                        textonly: false
+                                                    });
+                                   return;
+                                   $.mobile.loading("show", {
                                                         text: 'Verificando...',
                                                         textVisible: true,
                                                         theme: 'a',

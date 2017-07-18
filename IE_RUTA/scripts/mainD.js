@@ -89,6 +89,9 @@ App.prototype = {
         logIn = document.getElementById("logIn");        
         logIn.addEventListener("click",
                                function() { 
+
+                                   showAlert('Componente de Cámara no encontrado');
+                                   return;
                                    //navigator.notification.alert('demo')
                                    $.mobile.loading("show", {
                                                         text: 'Verificando...',
