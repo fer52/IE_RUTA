@@ -20,14 +20,14 @@
             <div data-role="content" style="padding-top: 3%;">
 
                 Usuario :
-                <input type="text" id="userName" value="" />
+                <input type="text" id="userName" style="text-transform:uppercase" value="" />
                 Clave:
                 <input type="password" id="pwd" value="" />
 
                 <a id="logIn" data-role="button" >Ingresar</a>
 
                 <br/><br/>
-                <label>Update 1.1.7</label>
+                <label>Update 2.0.3</label>
             </div>
         </div>
                 
@@ -50,7 +50,7 @@
                 
                 <ul data-role="listview">
                     <li data-role="list-divider" role="heading" class="ui-li-divider ui-bar-inherit ui-first-child">
-                        RUTA ACTIVA
+                        RUTAS
                     </li>    
                     <ul id="listAllActive" data-role="listview" data-inset="true">                    
                     </ul>
@@ -62,10 +62,10 @@
                     <span class="material-icons" style="margin: 12px 0px;">add</span>
                 </a>               
                 
-                <span style="bottom:25px" class="textButton position-right">Rutas</span>
+                <!--<span style="bottom:25px" class="textButton position-right">Rutas</span>
                 <a id="historyButton"  style="" class='button circle position-right orange'>
                     <span class="material-icons" style="margin: 12px 0px;">history</span>
-                </a>
+                </a>-->
                 
                 
                 <!--<a id="listComplete"  class='button circle position-right gray'>
@@ -141,7 +141,7 @@
                         RUTA NUEVA
                     </li>
                     <li data-role="list-divider" role="heading" class="ui-li-divider ui-bar-inherit ui-first-child">
-                        <input id="nameRoute" type="text" />
+                        <input id="nameRoute" type="text" style="text-transform:uppercase" />
                     </li>
                     <li>
                         <ul id="listAllNew" data-role="listview" data-inset="true">                    
@@ -150,11 +150,17 @@
                     </li>
                 </ul>
                 
-                <span style="bottom:65px;left:10px" class="textButton position-left">Guardar</span>
-                <a id="saveRoute" style="bottom:5px" class='button circle position-left green'>&check;</a>
+                <!--<span style="bottom:65px;left:10px" class="textButton position-left">Guardar</span>
+                <a id="saveRoute" style="bottom:5px" class='button circle position-left green'>&check;</a>-->
                 
-                <span style="bottom:65px;right:10px" class="textButton position-right">Nueva</span>
-                <a id="newItem"  class='button circle position-right blue'>&plus;</a>       
+                <!--<span style="bottom:65px;right:10px" class="textButton position-right">Agregar</span>
+                <a id="newItemR" class='button circle position-right blue'>&plus;</a>      -->
+                
+                 <span style="bottom:85px" class="textButton position-right">Agregar</span>
+                <a id="newItemR" style="bottom:65px"  class='button circle position-right blue'>
+                    <span class="material-icons" style="margin: 12px 0px;">add</span>
+                </a>   
+                
             </div>                          
         </div>
         
@@ -169,10 +175,12 @@
                     <h1>Nuevo Ingreso</h1>
                     Nombre
                     <input id="newCode" type="text" name="code" />
+                    No. Tributario
+                    <input id="dir" type="text" name="nTributario" />
                     Dirección
                     <input id="dir" type="text" name="code" />
                     Telefono
-                    <input id="tel" type="text" name="code" />
+                    <input id="tel" type="text" name="tel" />
                     Vista Previa
                     <img id="previewTakePhoto" src="" style="width:300px;height:200px;" />
                     <div style="width:290px;height:300px;" id="map"></div>
@@ -273,7 +281,7 @@
 
         <script type="text/javascript" charset="utf-8" src="scripts/mainD.js"></script>
         
-        <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAh897eqGQVFrHojFo_w_PzHiEHaJ7gGOY&callback=loadGeo"></script>
+        <!--<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAh897eqGQVFrHojFo_w_PzHiEHaJ7gGOY&callback=loadGeo"></script>-->
     
         
     </body>

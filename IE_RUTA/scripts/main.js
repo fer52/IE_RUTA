@@ -55,14 +55,7 @@ App.prototype = {
         
         logIn.addEventListener("click",
                                function() { 
-                                   //navigator.notification.alert('demo')
-                                   $.mobile.loading("show", {
-                                                        text: 'Componente de Cámara no encontrado',
-                                                        textVisible: true,
-                                                        theme: 'a',
-                                                        textonly: false
-                                                    });
-                                   return;
+
                                    $.mobile.loading("show", {
                                                         text: 'Verificando...',
                                                         textVisible: true,
@@ -95,11 +88,8 @@ App.prototype = {
                                                   alert(msg);
                                               }
                                           });
-                                   /*if (document.getElementById("userName").value.toString().toLowerCase() == 'administrador' && document.getElementById("pwd").value.toString().toLowerCase() == '1234') {
-                                   $.mobile.changePage("#home", { transition: "flip" });
-                                   }else {
-                                   alert('Usuario o contraseña incorrecta')
-                                   }*/
+                                   
+                                  
                                });
         
         //scann

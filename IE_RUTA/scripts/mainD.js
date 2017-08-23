@@ -54,9 +54,9 @@ App.prototype = {
             historyButton = document.getElementById("historyButton");
         
         //paginas
-        $('#newItemRoute').on('pageshow',function(){
+        /*$('#newItemRoute').on('pageshow',function(){
             //updateDataMap();
-        });
+        });*/
         
         //paginas
         $('#newroute').on('pagebeforeshow',function(){
@@ -90,8 +90,7 @@ App.prototype = {
         logIn.addEventListener("click",
                                function() { 
 
-                                   showAlert('Componente de Cámara no encontrado');
-                                   return;
+                                   
                                    //navigator.notification.alert('demo')
                                    $.mobile.loading("show", {
                                                         text: 'Verificando...',
@@ -102,7 +101,7 @@ App.prototype = {
                                    user = document.getElementById("userName").value.toString().toUpperCase();
                                    var parametro = {"user":user,"pw":document.getElementById("pwd").value.toString()};
                                    
-                                   $.ajax({
+                                   /*$.ajax({
                                               type: "POST",
                                               dataType: "json",
                                               url: "http://agensedomicilio.agense.net/login.php",
@@ -128,12 +127,14 @@ App.prototype = {
                                                   $.mobile.loading("hide")
                                                   alert(msg);
                                               }
-                                          });
-                                   /*if (document.getElementById("userName").value.toString().toLowerCase() == 'administrador' && document.getElementById("pwd").value.toString().toLowerCase() == '1234') {
-                                   $.mobile.changePage("#home", { transition: "flip" });
-                                   }else {
-                                   alert('Usuario o contraseña incorrecta')
-                                   }*/
+                                          });*/
+                                   if(parametro.user == "ADMIN" && parametro.pw == "4321"){
+                                       $.mobile.changePage("#pageactive", { transition: "flip" });
+                                   }else{
+                                       showAlert('Usuario o contraseña incorrecta');
+                                   }
+                                   $.mobile.loading("hide")
+                                   
                                });
         
         //nueva ruta
@@ -152,11 +153,11 @@ App.prototype = {
                                       function() { 
                                           //that._selectedResult(1); 
                                       });*/
-        historyButton.addEventListener("click",
+        /*historyButton.addEventListener("click",
                                     function() { 
                                         //that._selectedResult(0); 
                                         createHistory();
-                                    });
+                                    });*/
         document.getElementById("returnActiveHistory").addEventListener("click",
                                     function() { 
                                         $.mobile.changePage("#pageactive", { transition: "flip" });
@@ -177,30 +178,30 @@ App.prototype = {
                                     function() { 
                                         $.mobile.changePage("#pagesettings", { transition: "flip" });
                                     });*/
-        document.getElementById("returnAcive").addEventListener("click",
+        /*document.getElementById("returnAcive").addEventListener("click",
                                     function() { 
                                         $.mobile.changePage("#pageactive", { transition: "flip" });
-                                    });
-        document.getElementById("moveStepArrive").addEventListener("click",
+                                    });*/
+        /*document.getElementById("moveStepArrive").addEventListener("click",
                                     function() { 
                                         moveStep(1);
-                                    });
-        document.getElementById("moveStepDelivery").addEventListener("click",
+                                    });*/
+        /*document.getElementById("moveStepDelivery").addEventListener("click",
                                     function() { 
                                         moveStep(2);
                                     });
-                
+                */
         
         //nueva ruta
-        document.getElementById("saveRoute").addEventListener("click",
+        /*document.getElementById("saveRoute").addEventListener("click",
                                     function() { 
                                         that._createRouteActive();
                                         $.mobile.changePage("#pageactive", { transition: "flip" });                                        
-                                    });
+                                    });*/
         
-        document.getElementById("newItem").addEventListener("click",
+        document.getElementById("newItemR").addEventListener("click",
                                     function() { 
-                                        
+                                        console.log('click new item')
                                         $.mobile.changePage("#newItemRoute", { transition: "flip" });
                                         
                                     });
@@ -220,8 +221,9 @@ App.prototype = {
                                     });
         document.getElementById("saveNewItem").addEventListener("click",
                                     function() { 
-                                        console.log('Save Item');
-                                        that._saveItem();                                        
+                                        console.log('Save new Item');
+                                        showAlert('Conexión no establecida, intente nuevamente');
+                                        //that._saveItem();                                        
                                     });
         
         
@@ -855,13 +857,13 @@ var map;
 function loadGeo() {
     if (!map) {
         //alert('create map')
-        map = new google.maps.Map(document.getElementById('map'), {
+        /*map = new google.maps.Map(document.getElementById('map'), {
             center: {
                 lat: 14.598385,
                 lng: -90.651017
             },
             zoom: 11
-        });
+        });*/
 
         // var myLatlng = new google.maps.LatLng(-15.363882, 90.044922);
         //
