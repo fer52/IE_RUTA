@@ -8,6 +8,8 @@
         <link href="jquery-mobile/jquery.mobile-1.4.5.min.css" rel="stylesheet" type="text/css" />
         <link href="styles/theme.css" rel="stylesheet" type="text/css" />
 
+        
+        <link href="styles/iconfont/material-icons.css" rel="stylesheet" type="text/css" />        
         <link href="styles/material.css" rel="stylesheet" type="text/css" />        
         
     </head>
@@ -27,7 +29,7 @@
                 <a id="logIn" data-role="button" >Ingresar</a>
 
                 <br/><br/>
-                <label>Update 2.0.3</label>
+                <label>Update 2.0.8</label>
             </div>
         </div>
                 
@@ -73,6 +75,71 @@
                 </a>-->                
             </div>            
         </div>
+        
+        <div id="newroute" data-role="page" >
+            <div data-role="header" class="mt-header" data-position="fixed" data-tap-toggle="false">
+                <span id="returnsettings" class="material-icons" style="position:absolute">arrow_back</span>
+                <h1 style="overflow:initial">RUTAS</h1>
+            </div>
+            <div data-role="content" style="padding-top: 5%;">                
+                <!--<h1>Entregas</h1>-->
+                <ul data-role="listview">
+                    <li data-role="list-divider" role="heading" class="ui-li-divider ui-bar-inherit ui-first-child">
+                        DETALLE RUTA
+                    </li>
+                    <li data-role="list-divider" role="heading" class="ui-li-divider ui-bar-inherit ui-first-child">
+                        <input id="nameRoute" readonly type="text" style="text-transform:uppercase" />
+                    </li>
+                    <li>
+                        <ul id="listAllNew" data-role="listview" data-inset="true">                    
+                        </ul>
+                        <p style="height:60px;"></p>
+                    </li>
+                </ul>
+                
+                <!--<span style="bottom:65px;left:10px" class="textButton position-left">Guardar</span>
+                <a id="saveRoute" style="bottom:5px" class='button circle position-left green'>&check;</a>-->
+                
+                <!--<span style="bottom:65px;right:10px" class="textButton position-right">Agregar</span>
+                <a id="newItemR" class='button circle position-right blue'>&plus;</a>      -->
+                
+                 <span style="bottom:85px" class="textButton position-right">Agregar</span>
+                <a id="newItemR" style="bottom:65px"  class='button circle position-right blue'>
+                    <span class="material-icons" style="margin: 12px 0px;">add</span>
+                </a>   
+                
+            </div>                          
+        </div>
+        
+        <div id="newItemRoute" data-role="page" >
+            <div data-role="header" class="mt-header" data-position="fixed" data-tap-toggle="false">
+                <span id="returnNewRoute" class="material-icons" style="position:absolute">arrow_back</span>
+                <h1 style="overflow:initial">RUTAS</h1>
+            </div>
+            <div data-role="content" style="padding-top: 5%;">
+                
+                <div style="position:absolute;height:100%;width:90%">
+                    <h1>Nuevo Ingreso</h1>
+                    Nombre
+                    <input id="newCode" type="text" name="code" />
+                    No. Tributario
+                    <input id="dir" type="text" name="nTributario" />
+                    Dirección
+                    <input id="dir" type="text" name="code" />
+                    Telefono
+                    <input id="tel" type="text" name="tel" />
+                    Vista Previa
+                    <img id="previewTakePhoto" src="" style="width:300px;height:200px;" />
+                    <div style="width:290px;height:300px;" id="map"></div>
+                </div>
+                <a id="saveNewItem" class='button circle position-left green'>&check;</a>
+                <a id="takePhotoNewItem" href="#" class='button circle position-right blue'>
+                    <span class="material-icons" style="margin: 10px 0px;">camera_enhance</span>                    
+                </a>                
+            </div>            
+        </div>
+        
+        
         
         <div id="pageHistory" data-role="page" >
             <div data-role="header" class="mt-header" data-position="fixed" data-tap-toggle="false">
@@ -129,68 +196,6 @@
         </div>
         
         
-        <div id="newroute" data-role="page" >
-            <div data-role="header" class="mt-header" data-position="fixed" data-tap-toggle="false">
-                <span id="returnsettings" class="material-icons" style="position:absolute">arrow_back</span>
-                <h1 style="overflow:initial">RUTAS</h1>
-            </div>
-            <div data-role="content" style="padding-top: 5%;">                
-                <!--<h1>Entregas</h1>-->
-                <ul data-role="listview">
-                    <li data-role="list-divider" role="heading" class="ui-li-divider ui-bar-inherit ui-first-child">
-                        RUTA NUEVA
-                    </li>
-                    <li data-role="list-divider" role="heading" class="ui-li-divider ui-bar-inherit ui-first-child">
-                        <input id="nameRoute" type="text" style="text-transform:uppercase" />
-                    </li>
-                    <li>
-                        <ul id="listAllNew" data-role="listview" data-inset="true">                    
-                        </ul>
-                        <p style="height:60px;"></p>
-                    </li>
-                </ul>
-                
-                <!--<span style="bottom:65px;left:10px" class="textButton position-left">Guardar</span>
-                <a id="saveRoute" style="bottom:5px" class='button circle position-left green'>&check;</a>-->
-                
-                <!--<span style="bottom:65px;right:10px" class="textButton position-right">Agregar</span>
-                <a id="newItemR" class='button circle position-right blue'>&plus;</a>      -->
-                
-                 <span style="bottom:85px" class="textButton position-right">Agregar</span>
-                <a id="newItemR" style="bottom:65px"  class='button circle position-right blue'>
-                    <span class="material-icons" style="margin: 12px 0px;">add</span>
-                </a>   
-                
-            </div>                          
-        </div>
-        
-        <div id="newItemRoute" data-role="page" >
-            <div data-role="header" class="mt-header" data-position="fixed" data-tap-toggle="false">
-                <span id="returnNewRoute" class="material-icons" style="position:absolute">arrow_back</span>
-                <h1 style="overflow:initial">RUTAS</h1>
-            </div>
-            <div data-role="content" style="padding-top: 5%;">
-                
-                <div style="position:absolute;height:100%;width:90%">
-                    <h1>Nuevo Ingreso</h1>
-                    Nombre
-                    <input id="newCode" type="text" name="code" />
-                    No. Tributario
-                    <input id="dir" type="text" name="nTributario" />
-                    Dirección
-                    <input id="dir" type="text" name="code" />
-                    Telefono
-                    <input id="tel" type="text" name="tel" />
-                    Vista Previa
-                    <img id="previewTakePhoto" src="" style="width:300px;height:200px;" />
-                    <div style="width:290px;height:300px;" id="map"></div>
-                </div>
-                <a id="saveNewItem" class='button circle position-left green'>&check;</a>
-                <a id="takePhotoNewItem" href="#" class='button circle position-right blue'>
-                    <span class="material-icons" style="margin: 10px 0px;">camera_enhance</span>                    
-                </a>                
-            </div>            
-        </div>
         
         
         <!--old data--------------->
