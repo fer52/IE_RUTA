@@ -15,6 +15,11 @@ function onDeviceReady() {
 function App() {
 }
 
+var currentInfo = {
+    idRoute:'',
+    idUser: ''
+}
+
 var currentItem = {
     latitude:0,
     longitude:0,
@@ -73,20 +78,22 @@ App.prototype = {
             createListNew()
         });
         
-        //paginas
-        /*$('#pageactive').on('pageload',function(){
+        //pagina inicial
+        $('#pageactive').on('pagebeforeshow', function() {
             
-        var lsNew = localStorage.getItem('listActive');
+            alert('load page')
             
-        if(lsNew == '' || lsNew == undefined){
-        localStorageActive = [];
-        }else{
-        localStorageActive = JSON.parse(lsNew);
-        }
+            /*var lsNew = localStorage.getItem('listActive');
+            
+            if (lsNew == '' || lsNew == undefined) {
+                localStorageActive = [];
+            }else {
+                localStorageActive = JSON.parse(lsNew);
+            }
                 
-        createListActive(false)
+            createListActive(false)*/
         });
-        */
+        
         //acciones
         logIn = document.getElementById("logIn");        
         logIn.addEventListener("click",
@@ -101,39 +108,40 @@ App.prototype = {
                                    user = document.getElementById("userName").value.toString().toUpperCase();
                                    var parametro = {"user":user,"pw":document.getElementById("pwd").value.toString()};
                                    
-                                   /*$.ajax({
-                                   type: "POST",
-                                   dataType: "json",
-                                   url: "http://agensedomicilio.agense.net/login.php",
-                                   crossDomain: true,
-                                   data: JSON.stringify(parametro),
-                                   cache: false,
-                                   success: function (info) {
-                                   $.mobile.loading("hide")
-                                   if (info.success) {
-                                   //localStorageApp.insertVariable('sessionDate', getCurrentDateA());
-                                   watchPosition();
-                                   localStorageAppLogin = getCurrentDateA();
-                                                      
-                                   //localStorage.setItem('dataDelivery', JSON.stringify(dataDelivery));
-                                   //localStorage.getItem('dataDelivery');
-                                   ide = info.ide;
-                                   $.mobile.changePage("#newroute", { transition: "flip" });
+                                   $.ajax({
+                                              type: "POST",
+                                              dataType: "json",
+                                              url: getURL("login.php"),
+                                              crossDomain: true,
+                                              data: JSON.stringify(parametro),
+                                              cache: false,
+                                              success: function (info) {
+                                                  $.mobile.loading("hide")
+                                                  if (info.success) {
+                                                      //localStorageApp.insertVariable('sessionDate', getCurrentDateA());
+                                                      //watchPosition();
+                                                      //localStorageAppLogin = getCurrentDateA();
+                                                      //localStorage.setItem('dataDelivery', JSON.stringify(dataDelivery));
+                                                      //localStorage.getItem('dataDelivery');
+                                                      //ide = info.ide;
+                                                      currentInfo.idUser = info.id;
+                                                      $.mobile.loading("hide");
+                                                      $.mobile.changePage("#pageactive", { transition: "flip" });
+                                                  }else {
+                                                      showAlert('Usuario o contraseña incorrecta');
+                                                  }                                                  
+                                              },
+                                              error: function (msg) {
+                                                  $.mobile.loading("hide")
+                                                  alert(msg);
+                                              }
+                                          });
+                                   /*if (parametro.user == "ADMIN" && parametro.pw == "4321") {
+                                   $.mobile.changePage("#pageactive", { transition: "flip" });
                                    }else {
                                    showAlert('Usuario o contraseña incorrecta');
-                                   }                                                  
-                                   },
-                                   error: function (msg) {
-                                   $.mobile.loading("hide")
-                                   alert(msg);
-                                   }
-                                   });*/
-                                   if (parametro.user == "ADMIN" && parametro.pw == "4321") {
-                                       $.mobile.changePage("#pageactive", { transition: "flip" });
-                                   }else {
-                                       showAlert('Usuario o contraseña incorrecta');
-                                   }
-                                   $.mobile.loading("hide")
+                                   }*/
+                                   //$.mobile.loading("hide")
                                });
         
         //nueva ruta
@@ -314,11 +322,11 @@ App.prototype = {
         //console.log(currentItem.imagenURI);
         
         /*if (isFinish) {
-            finishedList(imageURI);
+        finishedList(imageURI);
         }else if (currentCodeMoveStep != null) {
-            updateStateItemActive(imageURI);
+        updateStateItemActive(imageURI);
         }else {s
-            document.getElementById('previewTakePhoto').src = imageURI;
+        document.getElementById('previewTakePhoto').src = imageURI;
         }*/
         document.getElementById('previewTakePhoto').src = imageURI;
     },
@@ -853,8 +861,42 @@ function updateDataMap() {
 
 function getNameRoute(result) {
     if (result.buttonIndex == 1) {
-        $("#nameRoute").val(result.input1);
-        $.mobile.changePage("#newroute", { transition: "flip" });
+        currentInfo.idRoute = guid();
+        var param = {name: result.input1,guid:currentInfo.idRoute,user:currentInfo.idUser}
+        
+        $.mobile.loading("show", {
+                             text: 'Guardando...',
+                             textVisible: true,
+                             theme: 'a',
+                             textonly: false
+                         });
+        
+        $.ajax({
+                   type: "POST",
+                   dataType: "json",
+                   url: getURL("newRoute.php"),
+                   crossDomain: true,
+                   data: JSON.stringify(param),
+                   cache: false,
+                   success: function (info) {
+                       $.mobile.loading("hide")
+                       if (info.success) {
+                           $("#nameRoute").val(result.input1);
+                           $.mobile.changePage("#newroute", { transition: "flip" });
+                       }else {
+                           currentInfo.idRoute = ''
+                           showAlert('Intente nuevamente');
+                       }                                                  
+                   },
+                   error: function (msg) {
+                       $.mobile.loading("hide")
+                       alert(msg);
+                   }
+               });
     }else {
     }
+}
+function getURL(url) {
+    var domain = 'http://approute.inversioneselmer.net/';
+    return domain + url;   
 }
