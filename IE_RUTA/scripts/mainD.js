@@ -67,31 +67,52 @@ App.prototype = {
         
         //paginas
         $('#newroute').on('pagebeforeshow', function() {
-            var lsNew = localStorage.getItem('listNew');
-            
+            /*var lsNew = localStorage.getItem('listNew');
             if (lsNew == '' || lsNew == undefined) {
-                localStorageNew = [];
+            localStorageNew = [];
             }else {
-                localStorageNew = JSON.parse(lsNew);
+            localStorageNew = JSON.parse(lsNew);
             }
-                
-            createListNew()
+            createListNew()*/
         });
         
         //pagina inicial
         $('#pageactive').on('pagebeforeshow', function() {
-            
-            alert('load page')
-            
-            /*var lsNew = localStorage.getItem('listActive');
-            
+            //alert('load page')
+            /*var lsNew = localStorage.getItem('routeListActive');
             if (lsNew == '' || lsNew == undefined) {
-                localStorageActive = [];
+            localStorageActive = [];
             }else {
-                localStorageActive = JSON.parse(lsNew);
-            }
-                
-            createListActive(false)*/
+            localStorageActive = JSON.parse(lsNew);
+            }*/
+            $.mobile.loading("show", {
+                                 text: 'Descagando Rutas...',
+                                 textVisible: true,
+                                 theme: 'a',
+                                 textonly: false
+                             });
+            var parametro = {"id":currentInfo.idUser};
+                                   
+            $.ajax({
+                       type: "POST",
+                       dataType: "json",
+                       url: getURL("processRoute.php"),
+                       crossDomain: true,
+                       data: JSON.stringify(parametro),
+                       cache: false,
+                       success: function (info) {
+                           $.mobile.loading("hide")
+                           if (info.success) {
+                               createListActive(info.Rows);
+                           }else {
+                               showAlert('Usuario o contraseña incorrecta');
+                           }                                                  
+                       },
+                       error: function (msg) {
+                           $.mobile.loading("hide")
+                           alert(msg);
+                       }
+                   });
         });
         
         //acciones
@@ -230,9 +251,9 @@ App.prototype = {
                                                                      });
         document.getElementById("saveNewItem").addEventListener("click",
                                                                 function() { 
-                                                                    console.log('Save new Item');
-                                                                    showAlert('Conexión no establecida, intente nuevamente');
-                                                                    //that._saveItem();                                        
+                                                                    //console.log('Save new Item');
+                                                                    //showAlert('Conexión no establecida, intente nuevamente');
+                                                                    that._saveItem();                                        
                                                                 });
         //var sessionDate = localStorageApp.getVariable('sessionDate');
         //var sessionDate = localStorageAppLogin;
@@ -242,60 +263,54 @@ App.prototype = {
     },
     //save item
     _saveItem:function() {
-        var code = document.getElementById('newCode');
+        var name = document.getElementById('name'),
+            idCustomer = document.getElementById('idCustomer'),
+            address = document.getElementById('address'),
+            tel = document.getElementById('tel');
+        
+        $.mobile.loading("show", {
+                             text: 'Guardando...',
+                             textVisible: true,
+                             theme: 'a',
+                             textonly: false
+                         });
         
         //validaciones
-        if ($.trim(code.value) == '') {
+        if ($.trim(name.value) == '') {
             showAlert('Debe ingresar Nombre');
             return;
         }
-        
+        if ($.trim(idCustomer.value) == '') {
+            showAlert('Debe ingresar identificación');
+            return;
+        }        
+        if ($.trim(address.value) == '') {
+            showAlert('Debe ingresar dirección');
+            return;
+        }        
+        if ($.trim(tel.value) == '') {
+            showAlert('Debe ingresar número Telefonico');
+            return;
+        }        
         if (currentItem.imageURI == '') {
             showAlert('Debe de ingresar fotografía');
             return;
         }
-         
-        //nuevo elemento
-        addItemListNew(code.value);
-        $('#listAllNew').listview('refresh');
-        
+                        
         var itemNew = {
             uuid: guid(),
-            uuidr: '',
-            user: user,
-            code: code.value,
-            imagenUri: currentItem.imageURI,
+            uuidRoute: currentInfo.idRoute,
+            user: currentInfo.idUser,
             position: geoItem,
             fecha: getCurrentDateA(),
             hora:getCurrentHour(),
-            a: 0,
-            aimagenUri: '',
-            aposition: 0,
-            afecha: 0,
-            ahora:0,
-            d:0,
-            dimagenUri: '',
-            dposition: 0,
-            dfecha: 0,
-            dhora:0,
-            f:0,
-            fimagenUri: '',
-            fposition: 0,
-            ffecha: 0,
-            fhora:0,
+            name: name.value,
+            idCus: idCustomer.value,
+            address: address.value,
+            tel: tel.value
         };
-        
-        //guarda elemento
-        localStorageNew.push(itemNew);        
-        updateStore(localStorageNew, 'listNew')
-        
-        //limpiar valores
-        currentItem.imageURI = '';
-        code.value = '';        
-        document.getElementById('previewTakePhoto').src = '';
-        
-        //regresar a pagina
-        $.mobile.changePage("#newroute", { transition: "flip" });
+          
+        uploadDataImage(itemNew, currentItem.imageURI)
     },
     //capture photo
     _capturePhoto: function() {
@@ -316,18 +331,7 @@ App.prototype = {
                                     });
     },
     _onPhotoDataSuccess: function(imageURI) {
-        currentItem.imageURI = imageURI;
-           
-        //$.mobile.changePage("#decision", { transition: "flip" });        
-        //console.log(currentItem.imagenURI);
-        
-        /*if (isFinish) {
-        finishedList(imageURI);
-        }else if (currentCodeMoveStep != null) {
-        updateStateItemActive(imageURI);
-        }else {s
-        document.getElementById('previewTakePhoto').src = imageURI;
-        }*/
+        currentItem.imageURI = imageURI;                  
         document.getElementById('previewTakePhoto').src = imageURI;
     },
     _onFail: function(message) {
@@ -528,25 +532,21 @@ function updateStore(object, idStore) {
 }
 
 //mantenimiento a lista activa
-function createListActive(sendDataImage) {
+function createListActive(listData) {
     $('#listAllActive').empty();
-    localStorageActive.forEach(function(item, index) {
+    listData.forEach(function(item, index) {
         addItemListActive(item);
-        if (sendDataImage) {
-            uploadDataImage(item.uuid, item.imagenUri);    
-        } 
     });
     $('#listAllActive').listview('refresh');
 };
 function addItemListActive(item) {
     var list = $('#listAllActive');
     
-    var showItemD = item.d===1 ? '' : 'display:none;',
-        showItemA = item.a===1 ? '' : 'display:none;';
-    
-    var code = item.code;
-    var icons = '<span id="delivery-' + code + '" class="material-icons" style="' + showItemD + 'margin: 12px 0px;float:right;font-size:24px;color:green">done_all</span><span id="arrive-' + code + '" class="material-icons" style="' + showItemA + 'margin: 12px 0px;float:right;font-size:24px;color:red">room</span><span id="store-' + code + '" class="material-icons" style="margin: 12px 0px;float:right;font-size:24px;color:blue">store</span>';
-    list.append('<li onclick="moveToStep(\'' + code + '\')" id="itemNew-' + code + '" data-icon="false"><a href="#">' + code + icons + '</a></li>');            
+    var name = item.NAME,
+        code = item.ID;
+    //var icons = '<span id="delivery-' + code + '" class="material-icons" style="' + showItemD + 'margin: 12px 0px;float:right;font-size:24px;color:green">done_all</span><span id="arrive-' + code + '" class="material-icons" style="' + showItemA + 'margin: 12px 0px;float:right;font-size:24px;color:red">room</span><span id="store-' + code + '" class="material-icons" style="margin: 12px 0px;float:right;font-size:24px;color:blue">store</span>';
+    var icons = '<span id="arrive-' + code + '" class="material-icons" style="margin: 12px 0px;float:right;font-size:24px;color:red">room</span>';
+    list.append('<li onclick="moveToStep(\'' + code + '\',\'' + name + '\')" id="itemNew-' + code + '" data-icon="false"><a href="#">' + name + icons + '</a></li>');            
 }
 
 //mantenimiento a lista nueva
@@ -567,32 +567,29 @@ function addItemListNew(code) {
 var currentCodeMoveStep = null;
 var indexCurrent = -1;
 
-function moveToStep(code) {
+function moveToStep(code, name) {
+    currentInfo.idRoute = code;
+    $("#nameRoute").val(name);
+    $.mobile.changePage("#newroute", { transition: "flip" });
     //var code = currentCodeMoveStep;
-    indexCurrent = -1;
-    localStorageActive.forEach(function(item, index) {
-        if (item.code === code) {
-            indexCurrent = index;
-            //currentCodeMoveStep = item;                             
-        }        
-    });
-    
+    /*indexCurrent = -1;
     currentCodeMoveStep = localStorageActive[indexCurrent];
-    
     if (currentCodeMoveStep && (currentCodeMoveStep.a === 0 || currentCodeMoveStep.d === 0)) {
-        //document.getElementById('moveStepArrive').disabled = true;
-        //document.getElementById('moveStepDelivery').disabled = true;
-        $("#btnMoveStepArrive").addClass('disabledButton');
-        $("#btnMoveStepDelivery").addClass('disabledButton');
-        if (currentCodeMoveStep.a === 0) {
-            //document.getElementById('moveStepArrive').disabled = false;        
-            $("#btnMoveStepArrive").removeClass('disabledButton');
-        }else if (currentCodeMoveStep.d === 0) {
-            $("#btnMoveStepDelivery").removeClass('disabledButton');
-            //document.getElementById('moveStepDelivery').disabled = false;        
-        }
-        $.mobile.changePage("#pageStep", { transition: "flip" });           
+    //document.getElementById('moveStepArrive').disabled = true;
+    //document.getElementById('moveStepDelivery').disabled = true;
+    $("#btnMoveStepArrive").addClass('disabledButton');
+    $("#btnMoveStepDelivery").addClass('disabledButton');
+    if (currentCodeMoveStep.a === 0) {
+    //document.getElementById('moveStepArrive').disabled = false;        
+    $("#btnMoveStepArrive").removeClass('disabledButton');
+    }else if (currentCodeMoveStep.d === 0) {
+    $("#btnMoveStepDelivery").removeClass('disabledButton');
+    //document.getElementById('moveStepDelivery').disabled = false;        
     }
+    $.mobile.changePage("#pageStep", { transition: "flip" });           
+    }*/
+    //$("#modalFinished").css('display', 'block');
+    //$("#modalFinished").css('display', 'none');    
 }
 
 //busca item activo para siguiente paso
@@ -706,43 +703,34 @@ function uploadDataImageFinish(uuidRecord, imageURI) {
 }
 
 //send Data   
-function uploadDataImage(uuidRecord, imageURI) {
-    //var that = this;
-    //var strCurrentItem = JSON.stringify(currentItem);
-    //navigator.notification.alert(strCurrentItem);
+function uploadDataImage(item, imagenURI) {
     var options = new FileUploadOptions();
     options.fileKey = "file";
     options.fileName = imageURI.substr(imageURI.lastIndexOf('/') + 1);
     options.mimeType = "image/jpeg";
 
-    var params = new Object();
-        
-    /*    params.iddelivery = requestItem.barCode.substr(0, requestItem.barCode.indexOf('T'));
-    params.barCode = requestItem.barCode;
-    params.d = requestItem.d;
-    params.m = requestItem.m;
-    params.a = requestItem.a;
-    params.h = requestItem.h;
-    params.motivo = requestItem.lagginStatus;
-    params.estado = requestItem.status;
-    params.iduser = requestItem.user;
-    params.latitud = requestItem.latitude;
-    params.longitud = requestItem.longitude;
-    */
-    params.uuidRecord = uuidRecord;
-    
-    options.params = params;
+    options.params = item;
     options.chunkedMode = false;
 
     var ft = new FileTransfer();
-    ft.upload(imageURI, "http://agensedomicilio.agense.net/uploadImage.php", imageWin, imageFail, options);               
-    //$.mobile.changePage("#home", { transition: "flip" });
+    ft.upload(imageURI, getURL("uploadImage.php"), imageWin, imageFail, options);               
 }
 function imageWin (r) {
+    //nuevo elemento
+    addItemListNew(code.value);
+    $('#listAllNew').listview('refresh');
+        
+    //limpiar valores
+    currentItem.imageURI = '';      
+    document.getElementById('previewTakePhoto').src = '';
+        
+    //regresar a pagina
+    $.mobile.changePage("#newroute", { transition: "flip" });
+    
     console.log("Code = " + r.responseCode);
     console.log("Response = " + r.response);
     console.log("Sent = " + r.bytesSent);
-    //alert(r.response);
+    alert(JSON.stringify(r.response));
 }
 function imageFail(error) {
     //alert("An error has occurred: Code = " = error.code);
