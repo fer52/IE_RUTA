@@ -1,6 +1,7 @@
 document.addEventListener("deviceready", onDeviceReady, false);
 
 var app;
+//<a href="waze://?ll=latitude,longitude">Waze</a>
 
 function onDeviceReady() {
     setTimeout(function() {
@@ -78,13 +79,7 @@ App.prototype = {
         
         //pagina inicial
         $('#pageactive').on('pagebeforeshow', function() {
-            //alert('load page')
-            /*var lsNew = localStorage.getItem('routeListActive');
-            if (lsNew == '' || lsNew == undefined) {
-            localStorageActive = [];
-            }else {
-            localStorageActive = JSON.parse(lsNew);
-            }*/
+
             $.mobile.loading("show", {
                                  text: 'Descagando Rutas...',
                                  textVisible: true,
@@ -543,9 +538,10 @@ function addItemListActive(item) {
     var list = $('#listAllActive');
     
     var name = item.NAME,
+        total = item.TOTAL,
         code = item.ID;
     //var icons = '<span id="delivery-' + code + '" class="material-icons" style="' + showItemD + 'margin: 12px 0px;float:right;font-size:24px;color:green">done_all</span><span id="arrive-' + code + '" class="material-icons" style="' + showItemA + 'margin: 12px 0px;float:right;font-size:24px;color:red">room</span><span id="store-' + code + '" class="material-icons" style="margin: 12px 0px;float:right;font-size:24px;color:blue">store</span>';
-    var icons = '<span id="arrive-' + code + '" class="material-icons" style="margin: 12px 0px;float:right;font-size:24px;color:red">room</span>';
+    var icons = '<span id="arrive-' + code + '" class="material-icons" style="margin: 12px 0px;float:right;font-size:24px;color:red">room</span> <span style="margin: 12px 0px;float:right;font-size:24px;color:blue">' + total + '</span>';
     list.append('<li onclick="moveToStep(\'' + code + '\',\'' + name + '\')" id="itemNew-' + code + '" data-icon="false"><a href="#">' + name + icons + '</a></li>');            
 }
 
