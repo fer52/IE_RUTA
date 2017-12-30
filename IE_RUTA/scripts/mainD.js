@@ -1,6 +1,7 @@
-document.addEventListener("deviceready", onDeviceReady, false);
+    document.addEventListener("deviceready", onDeviceReady, false);
 
 var app;
+
 //<a href="waze://?ll=latitude,longitude">Waze</a>
 
 function onDeviceReady() {
@@ -66,20 +67,40 @@ App.prototype = {
         //updateDataMap();
         });*/
         
-        //paginas
+        //pagina detalle de ruta
         $('#newroute').on('pagebeforeshow', function() {
-            /*var lsNew = localStorage.getItem('listNew');
-            if (lsNew == '' || lsNew == undefined) {
-            localStorageNew = [];
-            }else {
-            localStorageNew = JSON.parse(lsNew);
-            }
-            createListNew()*/
+            $.mobile.loading("show", {
+                                 text: 'Descargando Detalle...',
+                                 textVisible: true,
+                                 theme: 'a',
+                                 textonly: false
+                             });
+            
+            var parametro = {"id":currentInfo.idUser, "idR": currentInfo.idRoute};                                   
+            $.ajax({
+                       type: "POST",
+                       dataType: "json",
+                       url: getURL("processDetailRoute.php"),
+                       crossDomain: true,
+                       data: JSON.stringify(parametro),
+                       cache: false,
+                       success: function (info) {
+                           $.mobile.loading("hide")
+                           if (info.success) {
+                               createListDetail(info.Rows);
+                           }else {
+                               showAlert('Reintente la petición');
+                           }                                                  
+                       },
+                       error: function (msg) {
+                           $.mobile.loading("hide")
+                           alert(msg);
+                       }
+                   });
         });
         
         //pagina inicial
         $('#pageactive').on('pagebeforeshow', function() {
-
             $.mobile.loading("show", {
                                  text: 'Descagando Rutas...',
                                  textVisible: true,
@@ -100,7 +121,7 @@ App.prototype = {
                            if (info.success) {
                                createListActive(info.Rows);
                            }else {
-                               showAlert('Usuario o contraseña incorrecta');
+                               showAlert('Reintente la petición');
                            }                                                  
                        },
                        error: function (msg) {
@@ -296,7 +317,9 @@ App.prototype = {
             uuid: guid(),
             uuidRoute: currentInfo.idRoute,
             user: currentInfo.idUser,
-            position: geoItem,
+            //position: geoItem,
+            positionlat: geoItem.latitude,
+            positionlon: geoItem.longitude,
             fecha: getCurrentDateA(),
             hora:getCurrentHour(),
             name: name.value,
@@ -305,7 +328,7 @@ App.prototype = {
             tel: tel.value
         };
           
-        uploadDataImage(itemNew, currentItem.imageURI)
+        uploadDataImage(itemNew, currentItem.imageURI);
     },
     //capture photo
     _capturePhoto: function() {
@@ -545,6 +568,28 @@ function addItemListActive(item) {
     list.append('<li onclick="moveToStep(\'' + code + '\',\'' + name + '\')" id="itemNew-' + code + '" data-icon="false"><a href="#">' + name + icons + '</a></li>');            
 }
 
+//mantenimiento a lista detalle de ruta
+function createListDetail(listData) {
+    $('#listAllNew').empty();
+    listData.forEach(function(item, index) {
+        addItemListDetail(item);
+    });
+    $('#listAllNew').listview('refresh');
+};
+function addItemListDetail(item) {
+    var list = $('#listAllNew');
+    
+    var name = item.CUSTOMER,
+        code = item.ID;
+    //var icons = '<span id="delivery-' + code + '" class="material-icons" style="' + showItemD + 'margin: 12px 0px;float:right;font-size:24px;color:green">done_all</span><span id="arrive-' + code + '" class="material-icons" style="' + showItemA + 'margin: 12px 0px;float:right;font-size:24px;color:red">room</span><span id="store-' + code + '" class="material-icons" style="margin: 12px 0px;float:right;font-size:24px;color:blue">store</span>';
+    /*
+    var icons = '<span id="arrive-' + code + '" class="material-icons" style="margin: 12px 0px;float:right;font-size:24px;color:red">room</span> <span style="margin: 12px 0px;float:right;font-size:24px;color:blue">' + total + '</span>';
+    list.append('<li onclick="moveToStep(\'' + code + '\',\'' + name + '\')" id="itemNew-' + code + '" data-icon="false"><a href="#">' + name + icons + '</a></li>');            
+    */
+    list.append('<li id="itemNew-' + code + '" data-icon="info"><span onclick="removeItem(\'' + code + '\')" class="material-icons" style="float: left;color:red">remove_circle</span><a href="#">' + name + '</a></li>');            
+}
+
+
 //mantenimiento a lista nueva
 function createListNew() {
     $('#listAllNew').empty();
@@ -555,7 +600,7 @@ function createListNew() {
 };
 function addItemListNew(code) {
     var list = $('#listAllNew');
-    //<a href="#"></a>
+    
     list.append('<li id="itemNew-' + code + '" data-icon="info"><span onclick="removeItem(\'' + code + '\')" class="material-icons" style="float: left;color:red">remove_circle</span><a href="#">' + code + '</a></li>');            
 }
 
@@ -567,25 +612,6 @@ function moveToStep(code, name) {
     currentInfo.idRoute = code;
     $("#nameRoute").val(name);
     $.mobile.changePage("#newroute", { transition: "flip" });
-    //var code = currentCodeMoveStep;
-    /*indexCurrent = -1;
-    currentCodeMoveStep = localStorageActive[indexCurrent];
-    if (currentCodeMoveStep && (currentCodeMoveStep.a === 0 || currentCodeMoveStep.d === 0)) {
-    //document.getElementById('moveStepArrive').disabled = true;
-    //document.getElementById('moveStepDelivery').disabled = true;
-    $("#btnMoveStepArrive").addClass('disabledButton');
-    $("#btnMoveStepDelivery").addClass('disabledButton');
-    if (currentCodeMoveStep.a === 0) {
-    //document.getElementById('moveStepArrive').disabled = false;        
-    $("#btnMoveStepArrive").removeClass('disabledButton');
-    }else if (currentCodeMoveStep.d === 0) {
-    $("#btnMoveStepDelivery").removeClass('disabledButton');
-    //document.getElementById('moveStepDelivery').disabled = false;        
-    }
-    $.mobile.changePage("#pageStep", { transition: "flip" });           
-    }*/
-    //$("#modalFinished").css('display', 'block');
-    //$("#modalFinished").css('display', 'none');    
 }
 
 //busca item activo para siguiente paso
