@@ -397,7 +397,7 @@ App.prototype = {
     },
     _onPhotoDataSuccess: function(imageURI) {
         try {
-            showAlert(imageURI);
+            //showAlert(imageURI);
             currentItem.imageURI = imageURI;                  
             document.getElementById('previewTakePhoto').src = imageURI;
         }catch (exT) {
