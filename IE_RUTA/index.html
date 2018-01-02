@@ -7,9 +7,7 @@
         
         <link href="jquery-mobile/jquery.mobile-1.4.5.min.css" rel="stylesheet" type="text/css" />
         <link href="styles/theme.css" rel="stylesheet" type="text/css" />
-
-        
-        <link href="styles/iconfont/material-icons.css" rel="stylesheet" type="text/css" />        
+             
         <link href="styles/material.css" rel="stylesheet" type="text/css" />        
         
     </head>
@@ -29,7 +27,7 @@
                 <a id="logIn" data-role="button" >Ingresar</a>
 
                 <br/><br/>
-                <label>Update 2.0.18</label>
+                <label>Update V1.1.0</label>
             </div>
         </div>
                 
@@ -59,10 +57,12 @@
                     <p style="height:60px;"></p>
                 </ul>
         
-                <span style="bottom:85px" class="textButton position-right">Nueva Ruta</span>
+                <a id="routeButton" class='button circle position-right blue'>&plus;</a>
+                
+                <!--<span style="bottom:85px" class="textButton position-right">Nueva Ruta</span>
                 <a id="routeButton" style="bottom:65px"  class='button circle position-right blue'>
-                    <span class="material-icons" style="margin: 12px 0px;">add</span>
-                </a>               
+                    <span class="ui-nodisc-icon ui-btn ui-shadow ui-corner-all ui-icon-delete ui-btn-icon-left" >add</span>
+                </a>               &plus;-->
                 
                 <!--<span style="bottom:25px" class="textButton position-right">Rutas</span>
                 <a id="historyButton"  style="" class='button circle position-right orange'>
@@ -103,10 +103,12 @@
                 <!--<span style="bottom:65px;right:10px" class="textButton position-right">Agregar</span>
                 <a id="newItemR" class='button circle position-right blue'>&plus;</a>      -->
                 
-                 <span style="bottom:85px" class="textButton position-right">Agregar</span>
+                <a id="newItemR" class='button circle position-right blue'>&plus;</a>
+                
+                <!-- <span style="bottom:85px" class="textButton position-right">Agregar</span>
                 <a id="newItemR" style="bottom:65px"  class='button circle position-right blue'>
                     <span class="material-icons" style="margin: 12px 0px;">add</span>
-                </a>   
+                </a>-->   
                 
             </div>                          
         </div>
@@ -127,15 +129,21 @@
                     Dirección
                     <input id="address" type="text" name="address" />
                     Telefono
-                    <input id="tel" type="text" name="tel" />
+                    <input id="tel" type="number" name="tel" value=""/>
                     Vista Previa
-                    <img id="previewTakePhoto" src="" style="width:300px;height:200px;" />
-                    <div style="width:290px;height:300px;" id="map"></div>
+                    <img id="previewTakePhoto" src="" style="width:300px;height:200px;" />                    
                 </div>
                 <a id="saveNewItem" class='button circle position-left green'>&check;</a>
-                <a id="takePhotoNewItem" href="#" class='button circle position-right blue'>
+                <a id="takePhotoNewItem" class='button circle position-right blue'>&#9737;</a>
+                
+                <a id="routeWaze" href="https://waze.com/ul?ll=14.560802,-90.734496&navigate=yes&pin=1" class='button circle position-right blue'>&#9750;</a>
+                
+                
+                
+                
+                <!--<a id="takePhotoNewItem" href="#" class='button circle position-right blue'>
                     <span class="material-icons" style="margin: 10px 0px;">camera_enhance</span>                    
-                </a>                
+                </a>                -->
             </div>            
         </div>
         

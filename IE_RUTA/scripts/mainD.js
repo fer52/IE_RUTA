@@ -1,4 +1,4 @@
-    document.addEventListener("deviceready", onDeviceReady, false);
+document.addEventListener("deviceready", onDeviceReady, false);
 
 var app;
 
@@ -35,6 +35,8 @@ var currentItem = {
     h:0,
     request: 0    
 };
+
+var listDetailRoute = [];
 
 var ide = '-1';
 var user;
@@ -87,12 +89,15 @@ App.prototype = {
                        success: function (info) {
                            $.mobile.loading("hide")
                            if (info.success) {
+                               listDetailRoute = info.Rows;
                                createListDetail(info.Rows);
                            }else {
+                               listDetailRoute = [];
                                showAlert('Reintente la petición');
                            }                                                  
                        },
                        error: function (msg) {
+                           listDetailRoute = [];
                            $.mobile.loading("hide")
                            alert(msg);
                        }
@@ -252,6 +257,22 @@ App.prototype = {
         document.getElementById("newItemR").addEventListener("click",
                                                              function() { 
                                                                  console.log('click new item')
+                                                                 document.getElementById('saveNewItem').style.display = 'block';
+                                                                 document.getElementById('takePhotoNewItem').style.display = 'block';
+                                                                 document.getElementById('routeWaze').style.display = 'none';
+                                                                 
+                                                                 var name = document.getElementById('name'),
+                                                                     idCustomer = document.getElementById('idCustomer'),
+                                                                     address = document.getElementById('address'),
+                                                                     tel = document.getElementById('tel');  
+                                                                 
+                                                                 currentItem.imageURI = '';      
+                                                                 document.getElementById('previewTakePhoto').src = '';
+                                                                 name.value = '';
+                                                                 idCustomer.value = '';
+                                                                 address.value = '';
+                                                                 tel.value = '';
+                                                                 
                                                                  $.mobile.changePage("#newItemRoute", { transition: "flip" });
                                                              });
         
@@ -271,6 +292,7 @@ App.prototype = {
                                                                     //showAlert('Conexión no establecida, intente nuevamente');
                                                                     that._saveItem();                                        
                                                                 });
+        
         //var sessionDate = localStorageApp.getVariable('sessionDate');
         //var sessionDate = localStorageAppLogin;
         //if (sessionDate !== '' && sessionDate !== undefined && sessionDate == getCurrentDateA()) {            
@@ -282,14 +304,7 @@ App.prototype = {
         var name = document.getElementById('name'),
             idCustomer = document.getElementById('idCustomer'),
             address = document.getElementById('address'),
-            tel = document.getElementById('tel');
-        
-        $.mobile.loading("show", {
-                             text: 'Guardando...',
-                             textVisible: true,
-                             theme: 'a',
-                             textonly: false
-                         });
+            tel = document.getElementById('tel');                
         
         //validaciones
         if ($.trim(name.value) == '') {
@@ -312,6 +327,13 @@ App.prototype = {
             showAlert('Debe de ingresar fotografía');
             return;
         }
+        
+        $.mobile.loading("show", {
+                             text: 'Guardando...',
+                             textVisible: true,
+                             theme: 'a',
+                             textonly: false
+                         });
                         
         var itemNew = {
             uuid: guid(),
@@ -320,8 +342,8 @@ App.prototype = {
             //position: geoItem,
             positionlat: geoItem.latitude,
             positionlon: geoItem.longitude,
-            fecha: getCurrentDateA(),
-            hora:getCurrentHour(),
+            //fecha: getCurrentDateA(),
+            //hora:getCurrentHour(),
             name: name.value,
             idCus: idCustomer.value,
             address: address.value,
@@ -334,23 +356,53 @@ App.prototype = {
     _capturePhoto: function() {
         var that = this;
         
+        var options = {
+            // Some common settings are 20, 50, and 100
+            quality: 50,
+            destinationType: Camera.DestinationType.FILE_URI,
+            // In this app, dynamically set the picture source, Camera or photo gallery
+            sourceType: Camera.PictureSourceType.CAMERA,
+            encodingType: Camera.EncodingType.JPEG,
+            mediaType: Camera.MediaType.PICTURE,
+            allowEdit: false,
+            correctOrientation: true  //Corrects Android orientation quirks
+        };
+        
+        /*{
+        quality: 50,
+        destinationType: Camera.DestinationType.NATIVE_URI, //DATA_URL
+        encodingType: Camera.EncodingType.JPEG,
+        mediaType: Camera.MediaType.PICTURE,
+        //targetWidth: 800,
+        //targetHeight: 600,
+        //sourceType: navigator.camera.PictureSourceType.SAVEDPHOTOALBUM 
+        }*/        
         // Take picture using device camera and retrieve image as base64-encoded string.
-        navigator.camera.getPicture(function() {
-            //that._uploadPhoto.apply(that, arguments);
-            that._onPhotoDataSuccess.apply(that, arguments);
+        /*navigator.camera.getPicture(function() {
+        //that._uploadPhoto.apply(that, arguments);
+        that._onPhotoDataSuccess.apply(that, arguments);
         }, function() {
-            that._onFail.apply(that, arguments);
-        }, {
-                                        //quality: 30,
-                                        destinationType: that._destinationType.FILE_URI, //DATA_URL
-                                        targetWidth: 800,
-                                        targetHeight: 600
-                                        //sourceType: navigator.camera.PictureSourceType.SAVEDPHOTOALBUM 
-                                    });
+        that._onFail.apply(that, arguments);
+        }, options);*/
+        
+        navigator.camera.getPicture(function cameraSuccess(imageUri) {
+            //displayImage(imageUri);
+            // You may choose to copy the picture, save it somewhere, or upload.
+            //func(imageUri);
+            that._onPhotoDataSuccess(imageUri)
+        }, function cameraError(error) {
+            //console.debug("Unable to obtain picture: " + error, "app");
+            showAlert("Unable to obtain picture: " + error, "app");
+        }, options);
     },
     _onPhotoDataSuccess: function(imageURI) {
-        currentItem.imageURI = imageURI;                  
-        document.getElementById('previewTakePhoto').src = imageURI;
+        try {
+            showAlert(imageURI);
+            currentItem.imageURI = imageURI;                  
+            document.getElementById('previewTakePhoto').src = imageURI;
+        }catch (exT) {
+            showAlert(exT);    
+        }
     },
     _onFail: function(message) {
         showAlert(message);
@@ -513,6 +565,42 @@ function finishedList(imageURI) {
     showAlert('Ruta Finalizada');
 }
 
+//funcion para revision de detalle
+function viewItemRouteD(code) {
+    $.mobile.loading("show", {
+                         text: 'Descargando Detalle...',
+                         textVisible: true,
+                         theme: 'a',
+                         textonly: false
+                     });
+    
+    $.mobile.changePage("#newItemRoute", { transition: "flip" });
+    
+    var itemSel;
+    listDetailRoute.forEach(function(item, index) {
+        if (item.ID === code) {
+            itemSel = item;
+        }
+    });
+ 
+    var name = document.getElementById('name'),
+        idCustomer = document.getElementById('idCustomer'),
+        address = document.getElementById('address'),
+        tel = document.getElementById('tel');  
+    
+    name.value = itemSel.CUSTOMER;
+    idCustomer.value = itemSel.CUSTOMERID;
+    address.value = itemSel.CUSTOMERADDRESS;    
+    tel.value = itemSel.CUSTOMERPHONE;
+    document.getElementById('previewTakePhoto').src = getURL('imageRecord/' + code + '.jpg');
+    
+    document.getElementById('saveNewItem').style.display = 'none';
+    document.getElementById('takePhotoNewItem').style.display = 'none';
+    document.getElementById('routeWaze').style.display = 'block';
+    
+    document.getElementById('routeWaze').href="https://waze.com/ul?ll=" + itemSel.GLATITUDE + "," + itemSel.GLONGITUDE + "&navigate=yes&pin=1";
+}
+
 //funcionalidad de borrado de elementos
 var codeItemSelected;
 
@@ -586,9 +674,8 @@ function addItemListDetail(item) {
     var icons = '<span id="arrive-' + code + '" class="material-icons" style="margin: 12px 0px;float:right;font-size:24px;color:red">room</span> <span style="margin: 12px 0px;float:right;font-size:24px;color:blue">' + total + '</span>';
     list.append('<li onclick="moveToStep(\'' + code + '\',\'' + name + '\')" id="itemNew-' + code + '" data-icon="false"><a href="#">' + name + icons + '</a></li>');            
     */
-    list.append('<li id="itemNew-' + code + '" data-icon="info"><span onclick="removeItem(\'' + code + '\')" class="material-icons" style="float: left;color:red">remove_circle</span><a href="#">' + name + '</a></li>');            
+    list.append('<li id="itemNew-' + code + '" data-icon="info"><span onclick="removeItem(\'' + code + '\')" class="material-icons" style="float: left;color:red">remove_circle</span><a onclick="viewItemRouteD(\'' + code + '\')" href="#">' + name + '</a></li>');            
 }
-
 
 //mantenimiento a lista nueva
 function createListNew() {
@@ -726,25 +813,59 @@ function uploadDataImageFinish(uuidRecord, imageURI) {
 
 //send Data   
 function uploadDataImage(item, imagenURI) {
-    var options = new FileUploadOptions();
-    options.fileKey = "file";
-    options.fileName = imageURI.substr(imageURI.lastIndexOf('/') + 1);
-    options.mimeType = "image/jpeg";
+    $.mobile.loading("show", {
+                         text: 'Buscando Ubicación...',
+                         textVisible: true,
+                         theme: 'a',
+                         textonly: false
+                     });
+    navigator.geolocation.getCurrentPosition(
+        function(position) {
+            $.mobile.loading("show", {
+                                 text: 'Subiendo Imagen...',
+                                 textVisible: true,
+                                 theme: 'a',
+                                 textonly: false
+                             });
+            try {
+                var options = new FileUploadOptions();
+                options.fileKey = "file";
+                options.fileName = imagenURI.substr(imagenURI.lastIndexOf('/') + 1);
+                options.mimeType = "image/jpeg";
 
-    options.params = item;
-    options.chunkedMode = false;
+                item.positionlat = position.coords.latitude;
+                item.positionlon = position.coords.longitude;
+            
+                options.params = item;
+                //options.chunkedMode = false;
 
-    var ft = new FileTransfer();
-    ft.upload(imageURI, getURL("uploadImage.php"), imageWin, imageFail, options);               
+                var ft = new FileTransfer();
+                ft.upload(imagenURI, encodeURI(getURL("uploadImage.php")), imageWin, imageFail, options);               
+            }catch (exC) {
+                showAlert(ex);   
+            }
+        },
+        function(error) {
+            var msg = 'code: ' + error.code + '\n' + 'message: ' + error.message + '\n';
+            showAlert(msg);
+        },
+        { maximumAge: 2000, timeout: 5000, enableHighAccuracy: true }
+        );
 }
 function imageWin (r) {
     //nuevo elemento
-    addItemListNew(code.value);
-    $('#listAllNew').listview('refresh');
-        
     //limpiar valores
+    var name = document.getElementById('name'),
+        idCustomer = document.getElementById('idCustomer'),
+        address = document.getElementById('address'),
+        tel = document.getElementById('tel');  
+    
     currentItem.imageURI = '';      
     document.getElementById('previewTakePhoto').src = '';
+    name.value = '';
+    idCustomer.value = '';
+    address.value = '';
+    tel.value = '';    
         
     //regresar a pagina
     $.mobile.changePage("#newroute", { transition: "flip" });
@@ -752,10 +873,11 @@ function imageWin (r) {
     console.log("Code = " + r.responseCode);
     console.log("Response = " + r.response);
     console.log("Sent = " + r.bytesSent);
-    alert(JSON.stringify(r.response));
+    //alert(JSON.stringify(r.response));
 }
 function imageFail(error) {
     //alert("An error has occurred: Code = " = error.code);
+    showAlert(error);
 }
 
 function guid() {

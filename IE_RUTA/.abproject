@@ -13,7 +13,7 @@
     "Landscape"
   ],
   "iOSStatusBarStyle": "Default",
-  "BundleVersion": "2.0.17",
+  "BundleVersion": "1.0.7",
   "AndroidVersionCode": "1",
   "AndroidHardwareAcceleration": "true",
   "iOSDeviceFamily": [
