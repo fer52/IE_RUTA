@@ -27,7 +27,7 @@
                 <a id="logIn" data-role="button" >Ingresar</a>
 
                 <br/><br/>
-                <label>Update V1.1.2</label>
+                <label>Update V1.1.9</label>
             </div>
         </div>
                 
@@ -45,6 +45,15 @@
                 <!--<span class="material-icons" style="position:absolute">arrow_back</span>-->
                 <!--<span id="moveSettings" class="material-icons" style="position:absolute;right:0px">menu</span>-->
                 <h1 style="overflow:initial">RUTAS </h1>
+                
+                
+                <div data-role="controlgroup" data-type="horizontal" class="ui-btn-right ui-controlgroup ui-controlgroup-horizontal ui-corner-all">
+                    <div class="ui-controlgroup-controls ">
+                        <a id="logOut" role="button" data-icon="power" data-iconpos="notext" data-role="button" data-inline="true" class="ui-link ui-btn ui-btn-a ui-icon-power ui-btn-icon-notext ui-btn-inline ui-shadow ui-corner-all" data-theme="d">.</a>
+                        <a id="createUser" style="display:none" role="button" data-icon="person" data-iconpos="notext" data-role="button" data-inline="true" class="ui-link ui-btn ui-btn-a ui-icon-person ui-btn-icon-notext ui-btn-inline ui-shadow ui-corner-all" data-theme="d">.</a>
+                    </div>                    
+                </div>
+                
             </div>
             <div data-role="content" style="padding-top: 5%;">
                 
@@ -76,6 +85,28 @@
             </div>            
         </div>
         
+        <div id="pageUser" data-role="page" >
+            <div data-role="header" class="mt-header" data-position="fixed" data-tap-toggle="false">
+                <span id="returnInitActive" class="material-icons" style="position:absolute">arrow_back</span>
+                <h1 style="overflow:initial">NUEVO USUARIO </h1>
+                
+            </div>
+            <div data-role="content" style="padding-top: 5%;">
+                
+                <div style="position:absolute;height:100%;width:90%">
+                    <h1>Nuevo Ingreso</h1>
+                    Nombre
+                    <input id="nameUser" type="text" />
+                    Id
+                    <input id="idUser" type="text" />
+                    Contraseña
+                    <input id="pwUser" type="text" />
+                </div>
+                <a id="saveNewUser" class='button circle position-left green'>&check;</a>
+        
+            </div>            
+        </div>
+        
         <div id="newroute" data-role="page" >
             <div data-role="header" class="mt-header" data-position="fixed" data-tap-toggle="false">
                 <span id="returnsettings" class="material-icons" style="position:absolute">arrow_back</span>
@@ -103,7 +134,9 @@
                 <!--<span style="bottom:65px;right:10px" class="textButton position-right">Agregar</span>
                 <a id="newItemR" class='button circle position-right blue'>&plus;</a>      -->
                 
+                
                 <a id="newItemR" class='button circle position-right blue'>&plus;</a>
+                <a id="deleteRoute" class='button circle position-left red'>&#10006;</a>
                 
                 <!-- <span style="bottom:85px" class="textButton position-right">Agregar</span>
                 <a id="newItemR" style="bottom:65px"  class='button circle position-right blue'>

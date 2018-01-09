@@ -8,7 +8,6 @@ function onDeviceReady() {
     setTimeout(function() {
         navigator.splashscreen.hide();  
     }, 2000)
-    //navigator.splashscreen.hide();
     
     app = new App();
     app.run();
@@ -64,11 +63,6 @@ App.prototype = {
             routeButton = document.getElementById("routeButton"),
             historyButton = document.getElementById("historyButton");
         
-        //paginas
-        /*$('#newItemRoute').on('pageshow',function(){
-        //updateDataMap();
-        });*/
-        
         //pagina detalle de ruta
         $('#newroute').on('pagebeforeshow', function() {
             $.mobile.loading("show", {
@@ -99,7 +93,7 @@ App.prototype = {
                        error: function (msg) {
                            listDetailRoute = [];
                            $.mobile.loading("hide")
-                           alert(msg);
+                           alert(msg.responseText)
                        }
                    });
         });
@@ -169,6 +163,12 @@ App.prototype = {
                                                       currentInfo.idUser = info.id;
                                                       $.mobile.loading("hide");
                                                       $.mobile.changePage("#pageactive", { transition: "flip" });
+                                                      
+                                                      if (info.isOwner == 1) {
+                                                          $("#createUser").css('display', 'block');    
+                                                      }else {
+                                                          $("#createUser").css('display', 'none');    
+                                                      }
                                                   }else {
                                                       showAlert('Usuario o contraseña incorrecta');
                                                   }                                                  
@@ -185,6 +185,74 @@ App.prototype = {
                                    }*/
                                    //$.mobile.loading("hide")
                                });
+        
+        //logOut
+        document.getElementById("logOut").addEventListener("click",
+                                                               function() { 
+                                                                   $.mobile.changePage("#logon1", { transition: "flip" });
+                                                               });
+        
+        //nuevo usuario
+        document.getElementById("createUser").addEventListener("click",
+                                                               function() { 
+                                                                   $.mobile.changePage("#pageUser", { transition: "flip" });
+                                                               });
+        
+        document.getElementById("returnInitActive").addEventListener("click",
+                                                                     function() { 
+                                                                         $.mobile.changePage("#pageactive", { transition: "flip" });
+                                                                     });
+        
+        document.getElementById("saveNewUser").addEventListener("click",
+                                                                function() { 
+                                                                    //validaciones
+                                                                    if ($.trim(document.getElementById('nameUser').value) == '') {
+                                                                        showAlert('Debe ingresar Nombre');
+                                                                        return;
+                                                                    }
+                                                                    if ($.trim(document.getElementById('idUser').value) == '') {
+                                                                        showAlert('Debe ingresar id para ingreso a Aplicación');
+                                                                        return;
+                                                                    }        
+                                                                    if ($.trim(document.getElementById('pwUser').value) == '') {
+                                                                        showAlert('Debe ingresar contraseña');
+                                                                        return;
+                                                                    }        
+                                                                    
+                                                                    $.mobile.loading("show", {
+                                                                                         text: 'Guardando Usuario...',
+                                                                                         textVisible: true,
+                                                                                         theme: 'a',
+                                                                                         textonly: false
+                                                                                     });
+                                                                    
+                                                                    var param = {
+                                                                        "name":document.getElementById('nameUser').value,
+                                                                        "idus":document.getElementById('idUser').value,
+                                                                        "pw":document.getElementById('pwUser').value
+                                                                    };
+                                                                    
+                                                                    $.ajax({
+                                                                               type: "POST",
+                                                                               dataType: "json",
+                                                                               url: getURL("createUser.php"),
+                                                                               crossDomain: true,
+                                                                               data: JSON.stringify(param),
+                                                                               cache: false,
+                                                                               success: function (info) {
+                                                                                   $.mobile.loading("hide")
+                                                                                   if (info.success) {
+                                                                                       $.mobile.changePage("#pageactive", { transition: "flip" });
+                                                                                   }else {
+                                                                                       showAlert('Intente nuevamente');
+                                                                                   }   
+                                                                               },
+                                                                               error: function (msg) {
+                                                                                   $.mobile.loading("hide")
+                                                                                   alert(msg);
+                                                                               }
+                                                                           });
+                                                                });
         
         //nueva ruta
         routeButton.addEventListener("click",
@@ -253,7 +321,7 @@ App.prototype = {
         });*/
   
         //TODO
-        
+        //nuevo elemento de ruta
         document.getElementById("newItemR").addEventListener("click",
                                                              function() { 
                                                                  console.log('click new item')
@@ -276,6 +344,53 @@ App.prototype = {
                                                                  $.mobile.changePage("#newItemRoute", { transition: "flip" });
                                                              });
         
+        //eliminar ruta
+        document.getElementById("deleteRoute").addEventListener("click",
+                                                                function() { 
+                                                                    var nm = document.getElementById('nameRoute').value;
+                                                                    navigator.notification.confirm(
+                                                                        '¿Está seguro de borrar la ruta: ' + nm + '?', // message
+                                                                        function(btn) {
+                                                                            //currentInfo.idRoute
+                                                                            if (btn == 1) {
+                                                                                var param = {idR: currentInfo.idRoute};
+        
+                                                                                $.mobile.loading("show", {
+                                                                                                     text: 'Borrando...',
+                                                                                                     textVisible: true,
+                                                                                                     theme: 'a',
+                                                                                                     textonly: false
+                                                                                                 });
+        
+                                                                                $.ajax({
+                                                                                           type: "POST",
+                                                                                           dataType: "json",
+                                                                                           url: getURL("deleteRoute.php"),
+                                                                                           crossDomain: true,
+                                                                                           data: JSON.stringify(param),
+                                                                                           cache: false,
+                                                                                           success: function (info) {
+                                                                                               $.mobile.loading("hide")
+                                                                                               if (info.success) {
+                                                                                                   $.mobile.changePage("#pageactive", { transition: "flip" });
+                                                                                                   currentInfo.idRoute = '';
+                                                                                               }else {
+                                                                                                   //currentInfo.idRoute = ''
+                                                                                                   showAlert('Intente nuevamente');
+                                                                                               }   
+                                                                                           },
+                                                                                           error: function (msg) {
+                                                                                               $.mobile.loading("hide")
+                                                                                               alert(msg);
+                                                                                           }
+                                                                                       });
+                                                                            }
+                                                                        },
+                                                                        'Remover', // title
+                                                                        ['Si','No']     // buttonLabels
+                                                                        );
+                                                                });
+        
         //new item
         document.getElementById("returnNewRoute").addEventListener("click",
                                                                    function() { 
@@ -292,7 +407,6 @@ App.prototype = {
                                                                     //showAlert('Conexión no establecida, intente nuevamente');
                                                                     that._saveItem();                                        
                                                                 });
-        
         //var sessionDate = localStorageApp.getVariable('sessionDate');
         //var sessionDate = localStorageAppLogin;
         //if (sessionDate !== '' && sessionDate !== undefined && sessionDate == getCurrentDateA()) {            
@@ -598,17 +712,17 @@ function viewItemRouteD(code) {
     document.getElementById('takePhotoNewItem').style.display = 'none';
     document.getElementById('routeWaze').style.display = 'block';
     
-    document.getElementById('routeWaze').href="https://waze.com/ul?ll=" + itemSel.GLATITUDE + "," + itemSel.GLONGITUDE + "&navigate=yes&pin=1";
+    document.getElementById('routeWaze').href = "https://waze.com/ul?ll=" + itemSel.GLATITUDE + "," + itemSel.GLONGITUDE + "&navigate=yes&pin=1";
+    //document.getElementById('routeWaze').href = "waze://ul?ll=" + itemSel.GLATITUDE + "," + itemSel.GLONGITUDE + "&navigate=yes&pin=1";
 }
 
 //funcionalidad de borrado de elementos
 var codeItemSelected;
 
-function removeItem(code) {
-    console.log(code);
+function removeItem(code, name) {
     codeItemSelected = code;
     navigator.notification.confirm(
-        '¿Está seguro de remover ' + code + '?', // message
+        '¿Está seguro de remover a: ' + name + '?', // message
         onConfirmRemove, // callback to invoke with index of button pressed
         'Remover', // title
         ['Si','No']     // buttonLabels
@@ -617,20 +731,45 @@ function removeItem(code) {
 function onConfirmRemove(btn) {
     var itemIndex = -1;
     if (btn == 1) {
-        localStorageNew.forEach(function(item, index) {
-            if (item.code == codeItemSelected) {
-                itemIndex = index;
-            }
-        })
+        //name: result.input1,guid:currentInfo.idRoute,user:currentInfo.idUser
+        var param = {idRemove: codeItemSelected, idR: currentInfo.idRoute};
         
-        if (itemIndex > -1) {
-            localStorageNew.splice(itemIndex, 1);
-
-            updateStore(localStorageNew, 'listNew')                        
-            createListNew();
-        }
+        $.mobile.loading("show", {
+                             text: 'Borrando...',
+                             textVisible: true,
+                             theme: 'a',
+                             textonly: false
+                         });
+        
+        $.ajax({
+                   type: "POST",
+                   dataType: "json",
+                   url: getURL("deleteItem.php"),
+                   crossDomain: true,
+                   data: JSON.stringify(param),
+                   cache: false,
+                   success: function (info) {
+                       $.mobile.loading("hide")
+                       if (info.success) {
+                           //$("#nameRoute").val(result.input1);
+                           //$ .mobile.changePage("#newroute", { transition: "flip" });
+                           $('#itemNew-' + codeItemSelected).remove();
+                           $('#listAllNew').listview('refresh');
+                       }else {
+                           //currentInfo.idRoute = ''
+                           showAlert('Intente nuevamente');
+                       }   
+                       
+                       codeItemSelected = "";
+                   },
+                   error: function (msg) {
+                       $.mobile.loading("hide")
+                       alert(msg);
+                   }
+               });
     }
 }
+
 function updateStore(object, idStore) {
     if (object) {
         localStorage.setItem(idStore, JSON.stringify(object));
@@ -674,7 +813,7 @@ function addItemListDetail(item) {
     var icons = '<span id="arrive-' + code + '" class="material-icons" style="margin: 12px 0px;float:right;font-size:24px;color:red">room</span> <span style="margin: 12px 0px;float:right;font-size:24px;color:blue">' + total + '</span>';
     list.append('<li onclick="moveToStep(\'' + code + '\',\'' + name + '\')" id="itemNew-' + code + '" data-icon="false"><a href="#">' + name + icons + '</a></li>');            
     */
-    list.append('<li id="itemNew-' + code + '" data-icon="info"><span onclick="removeItem(\'' + code + '\')" class="material-icons" style="float: left;color:red">remove_circle</span><a onclick="viewItemRouteD(\'' + code + '\')" href="#">' + name + '</a></li>');            
+    list.append('<li id="itemNew-' + code + '" data-icon="info"><span onclick="removeItem(\'' + code + '\',\'' + name + '\')" class="material-icons" style="float: left;color:red">remove_circle</span><a onclick="viewItemRouteD(\'' + code + '\')" href="#">' + name + '</a></li>');            
 }
 
 //mantenimiento a lista nueva
@@ -995,6 +1134,11 @@ function getNameRoute(result) {
     if (result.buttonIndex == 1) {
         currentInfo.idRoute = guid();
         var param = {name: result.input1,guid:currentInfo.idRoute,user:currentInfo.idUser}
+        
+        if ($.trim(result.input1) == '') {
+            showAlert('Ingrese nombre valido')   
+            return;
+        }
         
         $.mobile.loading("show", {
                              text: 'Guardando...',

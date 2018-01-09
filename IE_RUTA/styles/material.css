@@ -140,6 +140,9 @@ color: #fff;
 .button.orange{
  background-color: #F79707;   
 }
+.button.red{
+ background-color: #e21c1c;   
+}
 /*
 .button.blue:hover {
   background-color: #229fcf;
