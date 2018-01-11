@@ -27,7 +27,7 @@
                 <a id="logIn" data-role="button" >Ingresar</a>
 
                 <br/><br/>
-                <label>Update V1.1.9</label>
+                <label>Update V1.2.2</label>
             </div>
         </div>
                 
@@ -46,13 +46,17 @@
                 <!--<span id="moveSettings" class="material-icons" style="position:absolute;right:0px">menu</span>-->
                 <h1 style="overflow:initial">RUTAS </h1>
                 
+                <div data-role="controlgroup" data-type="horizontal" class="ui-btn-left ui-controlgroup ui-controlgroup-horizontal ui-corner-all">
+                    <div class="ui-controlgroup-controls ">
+                        <a id="changePassword" role="button" data-icon="info" data-iconpos="notext" data-role="button" data-inline="true" class="ui-link ui-btn ui-btn-a ui-icon-info ui-btn-icon-notext ui-btn-inline ui-shadow ui-corner-all" data-theme="d">.</a>
+                    </div>                    
+                </div>
                 
                 <div data-role="controlgroup" data-type="horizontal" class="ui-btn-right ui-controlgroup ui-controlgroup-horizontal ui-corner-all">
                     <div class="ui-controlgroup-controls ">
                         <a id="logOut" role="button" data-icon="power" data-iconpos="notext" data-role="button" data-inline="true" class="ui-link ui-btn ui-btn-a ui-icon-power ui-btn-icon-notext ui-btn-inline ui-shadow ui-corner-all" data-theme="d">.</a>
-                        <a id="createUser" style="display:none" role="button" data-icon="person" data-iconpos="notext" data-role="button" data-inline="true" class="ui-link ui-btn ui-btn-a ui-icon-person ui-btn-icon-notext ui-btn-inline ui-shadow ui-corner-all" data-theme="d">.</a>
                     </div>                    
-                </div>
+                </div>                
                 
             </div>
             <div data-role="content" style="padding-top: 5%;">
@@ -66,8 +70,14 @@
                     <p style="height:60px;"></p>
                 </ul>
         
+                
+                <a id="createUser" class='button circle position-left orange'>&#9817;</a>
                 <a id="routeButton" class='button circle position-right blue'>&plus;</a>
                 
+                
+                <!--
+                <a id="createUser" style="display:none" role="button" data-icon="person" data-iconpos="notext" data-role="button" data-inline="true" class="ui-link ui-btn ui-btn-a ui-icon-person ui-btn-icon-notext ui-btn-inline ui-shadow ui-corner-all" data-theme="d">.</a>
+                -->
                 <!--<span style="bottom:85px" class="textButton position-right">Nueva Ruta</span>
                 <a id="routeButton" style="bottom:65px"  class='button circle position-right blue'>
                     <span class="ui-nodisc-icon ui-btn ui-shadow ui-corner-all ui-icon-delete ui-btn-icon-left" >add</span>
@@ -98,7 +108,7 @@
                     Nombre
                     <input id="nameUser" type="text" />
                     Id
-                    <input id="idUser" type="text" />
+                    <input id="idUser" type="text" style="text-transform:uppercase"/>
                     Contraseña
                     <input id="pwUser" type="text" />
                 </div>
@@ -120,6 +130,7 @@
                     </li>
                     <li data-role="list-divider" role="heading" class="ui-li-divider ui-bar-inherit ui-first-child">
                         <input id="nameRoute" readonly type="text" style="text-transform:uppercase" />
+                        <input type="text" data-clear-btn="true" name="searchCliente" id="searchCliente" placeholder="Buscar Cliente..."/>
                     </li>
                     <li>
                         <ul id="listAllNew" data-role="listview" data-inset="true">                    

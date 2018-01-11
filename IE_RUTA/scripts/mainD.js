@@ -188,9 +188,11 @@ App.prototype = {
         
         //logOut
         document.getElementById("logOut").addEventListener("click",
-                                                               function() { 
-                                                                   $.mobile.changePage("#logon1", { transition: "flip" });
-                                                               });
+                                                           function() { 
+                                                               document.getElementById('userName').value = '';
+                                                               document.getElementById('pwd').value = '';
+                                                               $.mobile.changePage("#logon1", { transition: "flip" });
+                                                           });
         
         //nuevo usuario
         document.getElementById("createUser").addEventListener("click",
@@ -407,6 +409,77 @@ App.prototype = {
                                                                     //showAlert('Conexión no establecida, intente nuevamente');
                                                                     that._saveItem();                                        
                                                                 });
+        
+        //cambiar contraseña
+        document.getElementById('changePassword').addEventListener("click",
+                                                                   function() { 
+                                                                       navigator.notification.prompt(
+                                                                           'Ingrese nueva contraseña', 
+                                                                           function(result) {
+                                                                               if (result.buttonIndex == 1) {
+                                                                                   var param = {pw: result.input1, user:currentInfo.idUser}
+        
+                                                                                   if ($.trim(result.input1) == '') {
+                                                                                       showAlert('Ingrese valor valido')   
+                                                                                       return;
+                                                                                   }
+        
+                                                                                   $.mobile.loading("show", {
+                                                                                                        text: 'Cambiando Contraseña...',
+                                                                                                        textVisible: true,
+                                                                                                        theme: 'a',
+                                                                                                        textonly: false
+                                                                                                    });
+        
+                                                                                   $.ajax({
+                                                                                              type: "POST",
+                                                                                              dataType: "json",
+                                                                                              url: getURL("changePw.php"),
+                                                                                              crossDomain: true,
+                                                                                              data: JSON.stringify(param),
+                                                                                              cache: false,
+                                                                                              success: function (info) {
+                                                                                                  $.mobile.loading("hide")
+                                                                                                  if (info.success) {
+                                                                                                      showAlert('Cambio exitoso de contraseña!');
+                                                                                                  }else {
+                                                                                                      showAlert('Intente nuevamente');
+                                                                                                  }                                                  
+                                                                                              },
+                                                                                              error: function (msg) {
+                                                                                                  $.mobile.loading("hide")
+                                                                                                  alert(msg);
+                                                                                              }
+                                                                                          });
+                                                                               }else {
+                                                                               }
+                                                                           },
+                                                                           'Contraseña', // title
+                                                                           ['Aceptar','Cancelar']
+                                                                           );
+                                                                   });
+        
+        //document.getElementById('')
+        $("#searchCliente").change(function() {
+            var lstItems = $("#listAllNew");
+            
+            var listItems = $('.itemDetailRoute');
+            var textSearch = this.value.toString();
+            if ($.trim(textSearch) != "") {
+                listItems.each(function(it, i) {
+                    if ($(i).attr('datanamedetail').toString().toUpperCase().indexOf(textSearch.toUpperCase()) > -1) {
+                        $(i).css("display", "block");
+                    }else {
+                        $(i).css("display", "none");
+                    }
+                })
+            }else {
+                listItems.each(function(it, i) {
+                    $(i).css("display", "block");
+                })      
+            }
+            //list.append('<li id="itemNew-' + code + '" class="itemDetailRoute" data-nameDetail="' + name + '" data-icon="info"><span onclick="removeItem(\'' + code + '\',\'' + name + '\')" class="material-icons" style="float: left;color:red">remove_circle</span><a onclick="viewItemRouteD(\'' + code + '\')" href="#">' + name + '</a></li>');            
+        });
         //var sessionDate = localStorageApp.getVariable('sessionDate');
         //var sessionDate = localStorageAppLogin;
         //if (sessionDate !== '' && sessionDate !== undefined && sessionDate == getCurrentDateA()) {            
@@ -813,7 +886,7 @@ function addItemListDetail(item) {
     var icons = '<span id="arrive-' + code + '" class="material-icons" style="margin: 12px 0px;float:right;font-size:24px;color:red">room</span> <span style="margin: 12px 0px;float:right;font-size:24px;color:blue">' + total + '</span>';
     list.append('<li onclick="moveToStep(\'' + code + '\',\'' + name + '\')" id="itemNew-' + code + '" data-icon="false"><a href="#">' + name + icons + '</a></li>');            
     */
-    list.append('<li id="itemNew-' + code + '" data-icon="info"><span onclick="removeItem(\'' + code + '\',\'' + name + '\')" class="material-icons" style="float: left;color:red">remove_circle</span><a onclick="viewItemRouteD(\'' + code + '\')" href="#">' + name + '</a></li>');            
+    list.append('<li id="itemNew-' + code + '" class="itemDetailRoute" datanamedetail="' + name + '" data-icon="info"><span onclick="removeItem(\'' + code + '\',\'' + name + '\')" class="material-icons" style="float: left;color:red">remove_circle</span><a onclick="viewItemRouteD(\'' + code + '\')" href="#">' + name + '</a></li>');            
 }
 
 //mantenimiento a lista nueva
